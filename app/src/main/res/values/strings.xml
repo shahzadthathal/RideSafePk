@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Ride Safe Pk</string>
+    <string name="SERVICE_URL">http://192.168.1.3:81/WebService/BIITAlumni.svc/</string>
+    <!--<string name="SERVICE_URL">http://10.0.2.2:81/WebService/BIITAlumni.svc/</string>-->
+
+    <string name="action_settings">Logout</string>
+    <string name="main_welcome">Welcome</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_add_vehicle">Add Vehicle</string>
+    <string name="title_activity_view_vehicle">View Vehicle</string>
+    <string name="title_activity_book_ride">Book a Ride</string>
+    <string name="title_activity_ride_detail">Ride Detail</string>
+
+    <string name="title_activity_forget_password">Forget Password</string>
+
+    <string name="str_btn_find">Find</string>
+    <string name="hnt_et_location">Enter location</string>
+    <string name="title_activity_add_address">Add Address</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_map">Map</string>
+
+
+    <string name="title_activity_select_address">Select Address</string>
+    <string name="title_activity_found_drivers">FoundDrivers</string>
+
+
+</resources>

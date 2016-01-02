@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+app:layout_behavior="@string/appbar_scrolling_view_behavior"
+tools:showIn="@layout/activity_view_vehicle"
+tools:context="com.example.shahzad.hireme.ViewVehicle"
+android:weightSum="1"
+android:paddingLeft="16dp"
+android:paddingTop="16dp"
+android:paddingRight="16dp">
+
+
+
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Vehicle Number"
+    android:id="@+id/txtName" />
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Model Name"
+    android:id="@+id/txtModelName" />
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Mnufacturer Name"
+    android:id="@+id/txtManufacturerName" />
+
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Update Vehicle"
+    android:id="@+id/btnUpdateVehicle"
+    android:layout_weight="0.09" />
+
+
+</LinearLayout>
