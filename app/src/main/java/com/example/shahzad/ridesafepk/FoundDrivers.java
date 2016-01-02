@@ -47,13 +47,8 @@ public class FoundDrivers extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        if(getIntent() != null && getIntent().hasExtra("DriversList")) {
-            ArrayList<DriverModel> driverList =  (ArrayList<DriverModel>)getIntent().getSerializableExtra("DriversList");
-            Log.e("DriversinFound", driverList.size() + "");
-        }
-
-
+        ArrayList<DriverModel> result = BookRide.result;
+        Log.d("drivers",result.size()+"");
 
         CustomListAdapter adapter=new CustomListAdapter(this, itemname, imgid);
         list=(ListView)findViewById(R.id.listView);

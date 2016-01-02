@@ -35,7 +35,6 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
 
     private ListView lv;
 
-
     /*GoogleMap myMap;
     MarkerOptions markerOptions;
     LatLng latLng;
@@ -45,12 +44,13 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
     Button btnFindNow;
     EditText txtPickup, txtDropoff;
 
+    public  static  ArrayList<DriverModel> result = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_ride);
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -136,26 +136,26 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
 
         protected  ArrayList<DriverModel> doInBackground(Void... params)
         {
-            ArrayList<DriverModel> result = null;
 
             try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 result = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
                 if(result!=null) {
                    Log.e("Total Drivers", result.size() + "");
-
                 }
             }catch (IOException e) {
                 e.printStackTrace();
             }
             return result;
         }
-        protected void onPostExecute(ArrayList<DriverModel> drivers) {
+        protected void onPostExecute(){
             pDialog.dismiss();
-            goToNextActivityBookRide(drivers);
+            startActivity(new Intent(getApplicationContext(), FoundDrivers.class));
+            //goToNextActivityBookRide(drivers);
         }
     }
 
+    /*
     public void goToNextActivityBookRide(ArrayList<DriverModel> drivers)
     {
         Log.d("gottonextactive","go to next activer");
@@ -164,4 +164,7 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
         startActivity(intent);
 
     }
+    */
+
+
 }
