@@ -13,5 +13,7 @@ public class GlobalSection {
 
     public  static ArrayList<DriverModel> driversList;
 
+    public static Integer SelectedDriverID;
+
 
 }

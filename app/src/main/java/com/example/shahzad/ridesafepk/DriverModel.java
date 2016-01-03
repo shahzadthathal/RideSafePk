@@ -10,12 +10,22 @@ public class DriverModel {
     Double distance;
 
 
+    public DriverModel(){
+        super();
+    }
+
     public DriverModel(Integer id, String name, String phone, Double distance)
     {
+        super();
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.distance = distance;
+    }
+
+    @Override
+    public String toString() {
+        return  this.name + ", " + this.distance + "km away";
     }
 
 }
