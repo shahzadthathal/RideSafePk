@@ -44,7 +44,7 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
     Button btnFindNow;
     EditText txtPickup, txtDropoff;
 
-    public  static  ArrayList<DriverModel> result = null;
+    //public  static  ArrayList<DriverModel> result;
 
 
     @Override
@@ -111,6 +111,8 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
                     }
                 }*/
 
+
+                //startActivity(new Intent(getApplicationContext(), FoundDrivers.class));
                 new FindDrivers().execute();
 
             }
@@ -122,7 +124,7 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
         myMap = retMap;
     }*/
 
-    public  class FindDrivers extends AsyncTask<Void, Void, ArrayList<DriverModel>>
+    public  class FindDrivers extends AsyncTask<Void, Void, DriverModel>
     {
 
         protected void onPreExecute() {
@@ -130,41 +132,31 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
             pDialog = new ProgressDialog(BookRide.this);
             pDialog.setMessage("Searching driver nearby you...");
             pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
+            pDialog.setCancelable(true);
             pDialog.show();
         }
 
-        protected  ArrayList<DriverModel> doInBackground(Void... params)
+        protected  DriverModel doInBackground(Void... params)
         {
-
+            DriverModel driverModel = null;
             try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
-                result = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
-                if(result!=null) {
-                   Log.e("Total Drivers", result.size() + "");
+                //result = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
+               GlobalSection.driversList = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
+                if(GlobalSection.driversList!=null) {
+                   Log.e("Total Drivers", GlobalSection.driversList.size() + "");
                 }
             }catch (IOException e) {
                 e.printStackTrace();
             }
-            return result;
+            return driverModel;
         }
-        protected void onPostExecute(){
+        protected void onPostExecute(DriverModel driverModel){
             pDialog.dismiss();
+            super.onPostExecute(driverModel);
             startActivity(new Intent(getApplicationContext(), FoundDrivers.class));
-            //goToNextActivityBookRide(drivers);
         }
     }
-
-    /*
-    public void goToNextActivityBookRide(ArrayList<DriverModel> drivers)
-    {
-        Log.d("gottonextactive","go to next activer");
-        Intent intent = new Intent(this, FoundDrivers.class);
-        intent.putExtra("DriversList", drivers);
-        startActivity(intent);
-
-    }
-    */
 
 
 }

@@ -16,6 +16,8 @@ import java.util.ArrayList;
 public class FoundDrivers extends AppCompatActivity {
 
     ListView list;
+    String[] drivername;
+    Integer[] driverimgid;
     String[] itemname ={
             "Driver 1",
             "Driver 2",
@@ -47,18 +49,27 @@ public class FoundDrivers extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ArrayList<DriverModel> result = BookRide.result;
-        Log.d("drivers",result.size()+"");
+        ArrayList<DriverModel> result = GlobalSection.driversList;
 
-        CustomListAdapter adapter=new CustomListAdapter(this, itemname, imgid);
+        Log.d("drivers ",result.size()+"");
+
+        for(int i=0; i<result.size(); i++)
+        {
+           String name =  result.get(i).name;
+//         Log.d("Driver",name+"");
+           drivername[i] = name;
+  //       driverimgid[i]= R.drawable.pic1;
+        }
+
+
+        CustomListAdapter adapter=new CustomListAdapter(this, drivername, imgid);
         list=(ListView)findViewById(R.id.listView);
         list.setAdapter(adapter);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TODO Auto-generated method stub
                 String Slecteditem = itemname[+position];
                 Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
