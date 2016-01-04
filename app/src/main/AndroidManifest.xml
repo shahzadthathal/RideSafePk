@@ -93,6 +93,10 @@
         <activity
             android:name=".FoundDrivers"
             android:label="@string/title_activity_found_drivers"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DriverDetail"
+            android:label="@string/title_activity_driver_detail"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

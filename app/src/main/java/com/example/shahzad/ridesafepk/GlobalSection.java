@@ -15,5 +15,7 @@ public class GlobalSection {
 
     public static Integer SelectedDriverID;
 
+    public  static DriverModel driverDetail;
+
 
 }

@@ -94,8 +94,23 @@ public class FoundDrivers extends AppCompatActivity {
                     // TODO Auto-generated method stub
 
                     GlobalSection.SelectedDriverID = myAdapter.getItem(position).id;
-                     Log.d("item", GlobalSection.SelectedDriverID+"");
-                    //startActivity(new Intent(this, DriverDetail.class));
+                    Integer did = myAdapter.getItem(position).id;
+                    String name = myAdapter.getItem(position).name;
+                    String phone = myAdapter.getItem(position).phone;
+                    Double distance = myAdapter.getItem(position).distance;
+
+                    DriverModel driverModel = new DriverModel(did,name,phone,distance);
+                    GlobalSection.driverDetail = driverModel;
+                    //GlobalSection.driverDetail.name = name;
+                    //GlobalSection.driverDetail.phone = phone;
+                    //GlobalSection.driverDetail.distance = distance;
+                    Log.d("did ", did + "");
+                    Log.d("name ", name + "");
+                    Log.d("phone ", phone + "");
+                    Log.d("distance ", distance + "");
+
+                     Log.d("item", GlobalSection.SelectedDriverID + "");
+                    startActivity(new Intent(getApplicationContext(), DriverDetail.class));
                 }
             });
         }
