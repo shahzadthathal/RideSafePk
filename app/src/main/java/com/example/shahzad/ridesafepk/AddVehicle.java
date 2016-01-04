@@ -94,18 +94,12 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         }
 
         protected  VehicleModel doInBackground(Void... params){
-
-
-
             try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 VehicleModel result = service.AddVehicle(getApplicationContext(), vModel);
                 if(result!=null) {
-                    //if(result.isError == 0) {
                     vehicleModel = new VehicleModel(result.id, result.name, result.model_name, result.manufacturer_name, result.ownerId);
-                    //  User.IsLoggedIn = true;
-                    //User.loggedInUserId = result.id;
-                    //}
+                    GlobalSection.vehicleDetail = vehicleModel;
                 }
             }catch (IOException e) {
                 e.printStackTrace();
@@ -118,21 +112,18 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         @Override
         protected void onPostExecute(VehicleModel vm) {
             pDialog.dismiss();
-            goToNextActivityAddVehicle(vm);
             super.onPostExecute(vm);
 
+            if(vm == null){
+                Toast.makeText(getApplicationContext(), "Vehicle not Aded found", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), ViewVehicle.class));
+            }
         }
     }
 
 
-    public void goToNextActivityAddVehicle(VehicleModel vm){
 
-        if(vm == null){
-            Toast.makeText(getApplicationContext(), "Vehicle not Aded found", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            startActivity(new Intent(this, ViewVehicle.class));
-        }
-    }
 
 }

@@ -17,5 +17,6 @@ public class GlobalSection {
 
     public  static DriverModel driverDetail;
 
+    public static  VehicleModel vehicleDetail;
 
 }

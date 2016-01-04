@@ -101,15 +101,15 @@ public class FoundDrivers extends AppCompatActivity {
 
                     DriverModel driverModel = new DriverModel(did,name,phone,distance);
                     GlobalSection.driverDetail = driverModel;
-                    //GlobalSection.driverDetail.name = name;
-                    //GlobalSection.driverDetail.phone = phone;
-                    //GlobalSection.driverDetail.distance = distance;
+
+                    /*
                     Log.d("did ", did + "");
                     Log.d("name ", name + "");
                     Log.d("phone ", phone + "");
                     Log.d("distance ", distance + "");
+                    Log.d("item", GlobalSection.SelectedDriverID + "");
+                    */
 
-                     Log.d("item", GlobalSection.SelectedDriverID + "");
                     startActivity(new Intent(getApplicationContext(), DriverDetail.class));
                 }
             });

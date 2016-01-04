@@ -198,9 +198,8 @@ public class WebserviceHandler {
     public VehicleModel UpdateVehicle(Context context, VehicleModel vm)  throws UnsupportedEncodingException
     {
         String url = context.getResources().getString(R.string.SERVICE_URL)+ "SaveVehicle/"+ URLEncoder.encode(String.valueOf(vm.id)) +URLEncoder.encode(String.valueOf(vm.name)) + "/" + URLEncoder.encode(String.valueOf(vm.model_name)) + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name)) + "/" + URLEncoder.encode(String.valueOf(vm.ownerId));
-        Log.d("save vehicle url",url);
+        Log.d("update vehicle url",url);
         String jsonResult = GetJsonFromUrl(url);
-        Log.d("Save  vehicle Response",jsonResult);
         if(jsonResult!="")
         {
             try {

@@ -30,12 +30,4 @@ public class VehicleModel {
         this.ownerId = ownerId;
     }
 
-    public VehicleModel  vehicleDetail()
-    {
-        //VehicleModel vehicleModel;
-       // vehicleModel = new VehicleModel(this.id, this.name, this.model_name, this.manufacturer_name, this.ownerId);
-        //vehicleModel.id = this.id;
-        //vehicleModel.name = this.name;
-        return this;
-    }
 }

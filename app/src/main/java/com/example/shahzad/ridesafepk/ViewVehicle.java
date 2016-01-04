@@ -36,8 +36,8 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
 
         btnUpdateVehicle = (Button) findViewById(R.id.btnAddVehicle);
 
-        vehicleModel = vehicleModel.vehicleDetail();
-        if(vehicleModel!=null) {
+        vehicleModel = GlobalSection.vehicleDetail;
+        if(vehicleModel!=null){
 
             txtName.setText(vehicleModel.name.toString());
             txtModelName.setText(vehicleModel.model_name.toString());
