@@ -34,7 +34,7 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
         txtModelName = (EditText) findViewById(R.id.txtModelName);
         txtManufacturerName = (EditText) findViewById(R.id.txtManufacturerName);
 
-        btnUpdateVehicle = (Button) findViewById(R.id.btnAddVehicle);
+        btnUpdateVehicle = (Button) findViewById(R.id.btnUpdateVehicle);
 
         vehicleModel = GlobalSection.vehicleDetail;
         if(vehicleModel!=null){
@@ -43,6 +43,10 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
             txtModelName.setText(vehicleModel.model_name.toString());
             txtManufacturerName.setText(vehicleModel.manufacturer_name.toString());
         }
+        else{
+             new VehicleDetail().execute();
+        }
+
         btnUpdateVehicle.setOnClickListener(this);
 
     }
@@ -51,10 +55,12 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.btnUpdateVehicle:
 
+                Integer vid = GlobalSection.vehicleDetail.id;
+
                 String name    = txtName.getText().toString();
                 String modelName = txtModelName.getText().toString();
                 String manufacturerName = txtManufacturerName.getText().toString();
-                Integer ownerId = User.loggedInUserId;
+                Integer ownerId = GlobalSection.vehicleDetail.ownerId;
 
                 if (name.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please enter your vehicle number", Toast.LENGTH_SHORT).show();
@@ -66,12 +72,53 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
                     Toast.makeText(getApplicationContext(), "Please enter manufacturer name", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    VehicleModel vehicleModel = new VehicleModel(name, modelName, manufacturerName, ownerId);
+                    VehicleModel vehicleModel = new VehicleModel(vid, name, modelName, manufacturerName, ownerId);
                     new UpdateVehicle(vehicleModel).execute();
                 }
                 break;
         }
     }
+
+    public class VehicleDetail extends AsyncTask<Void, Void, VehicleModel> {
+
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(ViewVehicle.this);
+            pDialog.setMessage("Retrieving vehicle detail...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        protected VehicleModel doInBackground(Void... paramd)
+        {
+            VehicleModel returnVehicleModel = null;
+            try{
+                WebserviceHandler wsh = new WebserviceHandler(getApplicationContext());
+                returnVehicleModel  = wsh.GetVehicleDetail(getApplicationContext(),User.loggedInUserId);
+                GlobalSection.vehicleDetail = returnVehicleModel;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            };
+            return returnVehicleModel;
+        }
+
+        protected void onPostExecute(VehicleModel vm)
+        {
+            pDialog.dismiss();
+            super.onPostExecute(vm);
+
+            if(vm != null) {
+
+                txtName.setText(vm.name.toString());
+                txtModelName.setText(vm.model_name.toString());
+                txtManufacturerName.setText(vm.manufacturer_name.toString());
+            }
+        }
+    }
+
     public  class UpdateVehicle extends AsyncTask<Void, Void, VehicleModel> {
         VehicleModel vModel;
 
@@ -96,28 +143,28 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
             try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 VehicleModel result = service.UpdateVehicle(getApplicationContext(), vModel);
-                if(result!=null) {
-                    //if(result.isError == 0) {
+                if(result!=null){
                     returnVehicleModel = new VehicleModel(result.id, result.name, result.model_name, result.manufacturer_name, result.ownerId);
-                    //  User.IsLoggedIn = true;
-                    //User.loggedInUserId = result.id;
-                    //}
+                    GlobalSection.vehicleDetail = returnVehicleModel;
                 }
             }catch (IOException e) {
                 e.printStackTrace();
-
             }
-
             return  returnVehicleModel;
         }
 
         @Override
         protected void onPostExecute(VehicleModel vm) {
             pDialog.dismiss();
+            if(vm !=null){
+                Toast.makeText(getApplicationContext(), "Vehicle updated", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "Vehicle not updated", Toast.LENGTH_SHORT).show();
+            }
             super.onPostExecute(vm);
-
         }
     }
-
 
 }

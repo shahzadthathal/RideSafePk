@@ -52,7 +52,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contact Him"
+        android:text="Hire Me"
         android:id="@+id/btnContactDriver"
         android:layout_below="@+id/tvDistance"
         android:layout_marginTop="65dp"

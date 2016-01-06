@@ -116,15 +116,10 @@ public void onClick(View v) {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 User result = service.Login(getApplicationContext(), user);
                 if(result!=null) {
-                    //if(result.isError == 0) {
                         returnUser = new User(result.id, result.name, result.email, result.password, result.phone, result.nic, result.userType, result.street, result.city, result.country, result.lat, result.lng, result.is_login, result.is_vehicle_added, result.reg_id, result.isError, result.errorMessage);
-                      //  User.IsLoggedIn = true;
-                        //User.loggedInUserId = result.id;
-                    //}
                 }
             }catch (IOException e) {
                 e.printStackTrace();
-
             }
 
             return  returnUser;
@@ -155,7 +150,13 @@ public void onClick(View v) {
          //  startActivity(new Intent(this, AddAddress.class));
 
            if (user.userType.equals("Driver")) {
-               startActivity(new Intent(this, AddVehicle.class));
+               if(user.is_vehicle_added.equals("yes")){
+                   startActivity(new Intent(getApplicationContext(), ViewVehicle.class));
+               }
+               else{
+                   startActivity(new Intent(this, AddVehicle.class));
+               }
+
            } else {
                startActivity(new Intent(this, BookRide.class));
            }

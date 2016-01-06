@@ -178,7 +178,7 @@ public class WebserviceHandler {
 
     public VehicleModel AddVehicle(Context context, VehicleModel vm)  throws UnsupportedEncodingException
     {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "SaveVehicle/" +URLEncoder.encode(String.valueOf(vm.name)) + "/" + URLEncoder.encode(String.valueOf(vm.model_name)) + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name)) + "/" + URLEncoder.encode(String.valueOf(vm.ownerId));
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "AddVehicle/" +URLEncoder.encode(String.valueOf(vm.name)) + "/" + URLEncoder.encode(String.valueOf(vm.model_name)) + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name)) + "/" + URLEncoder.encode(String.valueOf(vm.ownerId));
         Log.d("save vehicle url",url);
         String jsonResult = GetJsonFromUrl(url);
         Log.d("Save  vehicle Response",jsonResult);
@@ -197,7 +197,7 @@ public class WebserviceHandler {
 
     public VehicleModel UpdateVehicle(Context context, VehicleModel vm)  throws UnsupportedEncodingException
     {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "SaveVehicle/"+ URLEncoder.encode(String.valueOf(vm.id)) +URLEncoder.encode(String.valueOf(vm.name)) + "/" + URLEncoder.encode(String.valueOf(vm.model_name)) + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name)) + "/" + URLEncoder.encode(String.valueOf(vm.ownerId));
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "UpdateVehicle/"+ URLEncoder.encode(String.valueOf(vm.id))+"/" +URLEncoder.encode(String.valueOf(vm.name)) + "/" + URLEncoder.encode(String.valueOf(vm.model_name)) + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name)) + "/" + URLEncoder.encode(String.valueOf(vm.ownerId));
         Log.d("update vehicle url",url);
         String jsonResult = GetJsonFromUrl(url);
         if(jsonResult!="")
@@ -212,5 +212,24 @@ public class WebserviceHandler {
         }
         return null;
     }
+
+    public VehicleModel GetVehicleDetail(Context context, int ownerID) throws UnsupportedEncodingException
+    {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+"GetVehicleDetail/"+URLEncoder.encode(String.valueOf(ownerID));
+        Log.d("get vehicle detail",url);
+        String jsonResult = GetJsonFromUrl(url);
+        if(jsonResult !="")
+        {
+            try{
+                JSONObject vehicleObj = new JSONObject(jsonResult);
+                VehicleModel returnVehicle = new VehicleModel(vehicleObj.getInt("id"),vehicleObj.getString("name"),vehicleObj.getString("model_name"),vehicleObj.getString("manufacturer_name"),vehicleObj.getInt("ownerId"));
+                return returnVehicle;
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        return  null;
+    }
+
 
 }

@@ -32,11 +32,11 @@ android:paddingRight="16dp">
     android:id="@+id/txtManufacturerName" />
 
 <Button
-    android:layout_width="match_parent"
+    android:layout_width="171dp"
     android:layout_height="wrap_content"
     android:text="Update Vehicle"
     android:id="@+id/btnUpdateVehicle"
-    android:layout_weight="0.09" />
+    android:layout_gravity="center_horizontal" />
 
 
 </LinearLayout>
