@@ -74,10 +74,12 @@ public class WebserviceHandler {
             String line = null;
             while ((line = reader.readLine()) != null)
             {
-                sb.append(line + "\n");
+               // sb.append(line + "\n");
+                sb.append(line).append("\n");
             }
             is.close();
             result = sb.toString();
+
         } catch(Exception e)
         {
             _error=e.getMessage();
@@ -91,10 +93,30 @@ public class WebserviceHandler {
         result=result.replace("\"", "");
         result = result.replace("/", "");
         result = result.replaceAll("/", "");
+
+        //JSONObject json=new JSONObject(result);
+
         return result;
         //return jArray;
     }
 
+    public RideModel AddRide(Context context,RideModel obj) throws UnsupportedEncodingException
+    {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "AddRide/" + URLEncoder.encode(String.valueOf(obj.passengerID))  + "/" + URLEncoder.encode(String.valueOf(obj.driverID)) + "/" + URLEncoder.encode(String.valueOf(obj.from_destination)) + "/" + URLEncoder.encode(String.valueOf(obj.to_destination)) +"/" + URLEncoder.encode(String.valueOf(obj.from_lat)) + "/" + URLEncoder.encode(String.valueOf(obj.from_lng)) +"/"+ URLEncoder.encode(String.valueOf(obj.to_lat)) +"/"+ URLEncoder.encode(String.valueOf(obj.to_lng));
+        String jsonResult = GetJsonFromUrl(url);
+        Log.d("Add Job Url",url);
+        if(jsonResult!="")
+        {
+            try {
+                JSONObject ride = new JSONObject(jsonResult);
+                RideModel returnRide = new RideModel( ride.getInt("id"), ride.getInt("passengerID"), ride.getInt("driverID"), ride.getString("from_destination"), ride.getString("to_destination"), Double.parseDouble(ride.getString("from_lat")), Double.parseDouble(ride.getString("from_lng")), Double.parseDouble(ride.getString("to_lat")), Double.parseDouble(ride.getString("to_lng")), ride.getInt("status"));
+                return returnRide;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     public ArrayList<DriverModel> FindDriversRequest(Context context, double fromlat, double fromlng) throws UnsupportedEncodingException {
         String url = context.getResources().getString(R.string.SERVICE_URL)+ "GetDrivers/" +  URLEncoder.encode(String.valueOf(fromlat)) + "/" + URLEncoder.encode(String.valueOf(fromlng));

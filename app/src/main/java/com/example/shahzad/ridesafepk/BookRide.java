@@ -78,14 +78,14 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
         txtPickup.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 SelectAddress.isFrom = true;
-                //startActivity(new Intent(getApplicationContext(), SelectAddress.class));
+                startActivity(new Intent(getApplicationContext(), SelectAddress.class));
             }
         });
 
         txtDropoff.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 SelectAddress.isFrom = false;
-               // startActivity(new Intent(getApplicationContext(), SelectAddress.class));
+                startActivity(new Intent(getApplicationContext(), SelectAddress.class));
             }
         });
 
@@ -99,20 +99,6 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
             @Override
             public void onClick(View v) {
 
-                /*if(GlobalSection.FromLat > 0 && GlobalSection.ToLat >0)
-                {
-                    LatLng   fromlatLng = new LatLng(GlobalSection.FromLat, GlobalSection.FromLong);
-                    LatLng   tolatLng = new LatLng(GlobalSection.ToLat, GlobalSection.ToLong);
-                    if(myMap !=null) {
-                        Polyline line = myMap.addPolyline(new PolylineOptions()
-                                .add(fromlatLng, tolatLng)
-                                .width(5)
-                                .color(Color.RED));
-                    }
-                }*/
-
-
-                //startActivity(new Intent(getApplicationContext(), FoundDrivers.class));
                 new FindDrivers().execute();
 
             }
@@ -141,8 +127,8 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
             DriverModel driverModel = null;
             try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
-                //result = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
-               GlobalSection.driversList = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
+               // GlobalSection.driversList = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
+               GlobalSection.driversList = service.FindDriversRequest(getApplicationContext(),GlobalSection.FromLat,GlobalSection.FromLong);
                 if(GlobalSection.driversList!=null) {
                    Log.e("Total Drivers", GlobalSection.driversList.size() + "");
                 }
