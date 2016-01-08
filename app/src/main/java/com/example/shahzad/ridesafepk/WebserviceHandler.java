@@ -219,7 +219,8 @@ public class WebserviceHandler {
 
 
     public User Login(Context context, User loginUser) throws UnsupportedEncodingException {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "authenticate/" + URLEncoder.encode(loginUser.email) + "/" + loginUser.password;
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "authenticate/" + loginUser.email + "/" + loginUser.password;
+        URLEncoder.encode(url);
         Log.d("Login url",url);
         String jsonResult = GetJsonFromUrl(url);
         Log.d("Login Response",jsonResult);
