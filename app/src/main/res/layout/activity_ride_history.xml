@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.shahzad.ridesafepk.MainActivity">
+    tools:context="com.example.shahzad.ridesafepk.RideHistory">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,12 +16,12 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimaryDark"
+            android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_ride_history" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

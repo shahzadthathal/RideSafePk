@@ -163,6 +163,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         else if(user.isError == 0) {
             User.IsLoggedIn = true;
             User.loggedInUserId = user.id;
+            User.loggedInUserType = user.userType;
             startActivity(new Intent(this,AddAddress.class));
         }
         else{

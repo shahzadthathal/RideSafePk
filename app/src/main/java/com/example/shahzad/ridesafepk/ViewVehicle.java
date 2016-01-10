@@ -1,12 +1,15 @@
 package com.example.shahzad.ridesafepk;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,6 +81,41 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
                 break;
         }
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch(item.getItemId())
+        {
+            case R.id.action_profile:
+                Toast.makeText(getApplicationContext(),"Action Profile", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_add_ride:
+                startActivity(new Intent(getApplicationContext(), BookRide.class));
+                break;
+            case R.id.action_view_rides:
+                startActivity(new Intent(getApplicationContext(), RideHistory.class));
+                break;
+            case R.id.action_logout:
+                User.IsLoggedIn = false;
+                user = null;
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public class VehicleDetail extends AsyncTask<Void, Void, VehicleModel> {
 

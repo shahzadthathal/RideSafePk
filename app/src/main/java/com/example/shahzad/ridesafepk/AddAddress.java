@@ -201,17 +201,11 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
       if(User.IsLoggedIn)
       {
           int id = User.loggedInUserId;
-          Log.d("userid",id+"");
           String street =  address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
           String city = address.getLocality();
           String country = address.getCountryName();
           Double  lat =  address.getLatitude();
           Double  lng = address.getLongitude();
-          Log.d("Street", street + "");
-          Log.d("City",address.getLocality() +"");
-          Log.d("County",address.getCountryName()+"");
-          Log.d("Lat",address.getLatitude()+"");
-          Log.d("Lng",address.getLongitude() +"");
           user = new User(id, street, city, country, lat, lng);
          // new SaveUserAddress(user).execute();
       }

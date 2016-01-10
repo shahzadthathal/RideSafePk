@@ -10,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -73,15 +75,6 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
                double to_lat = GlobalSection.ToLat;
                double to_lng = GlobalSection.ToLong;
 
-                Log.d("customerid",customerid+"");
-                Log.d("driverid",driverid+"");
-                Log.d("from_address",from_address+"");
-                Log.d("to_address",to_address+"");
-                Log.d("from_lat",from_lat+"");
-                Log.d("from_lng",from_lng+"");
-                Log.d("to_lat",to_lat+"");
-                Log.d("to_lng",to_lng+"");
-
                RideModel rideModel = new RideModel(customerid, driverid,from_address, to_address, from_lat, from_lng, to_lat, to_lng);
                Log.d("rideModel", rideModel.from_destination+"");
 
@@ -92,6 +85,39 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
 
                Toast.makeText(this, "Conecting Driver, pleaase wait", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch(item.getItemId())
+        {
+            case R.id.action_profile:
+                Toast.makeText(getApplicationContext(),"Action Profile", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_add_ride:
+                startActivity(new Intent(getApplicationContext(),BookRide.class));
+                break;
+            case R.id.action_view_rides:
+                startActivity(new Intent(getApplicationContext(), RideHistory.class));
+                break;
+            case R.id.action_logout:
+                User.IsLoggedIn = false;
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class AddRideDetail extends AsyncTask<Void, Void, RideModel>
@@ -108,9 +134,15 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
         {
             RideModel rideModel = null;
             try {
+                Log.d("From lat",GlobalSection.rideDetailBeforeSave.from_lat+"");
+                Log.d("From lng",GlobalSection.rideDetailBeforeSave.from_lng+"");
+                Log.d("To lat",GlobalSection.rideDetailBeforeSave.to_lat+"");
+                Log.d("To lng",GlobalSection.rideDetailBeforeSave.to_lng+"");
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 rideModel =  service.AddRide(getApplicationContext(),GlobalSection.rideDetailBeforeSave);
-                GlobalSection.rideDetailBeforeSave = rideModel;
+                GlobalSection.rideDetailAfterSave = rideModel;
+                GlobalSection.selectedRideDetail = rideModel;
+
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -120,7 +152,7 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
             pDialog.dismiss();
             super.onPostExecute(rideModel);
             if(rideModel != null) {
-                startActivity(new Intent(getApplicationContext(), FoundDrivers.class));
+                startActivity(new Intent(getApplicationContext(), RideDetail.class));
             }
             else{
                 Toast.makeText(getApplicationContext(),"An error occour to create ride, please try again", Toast.LENGTH_LONG).show();

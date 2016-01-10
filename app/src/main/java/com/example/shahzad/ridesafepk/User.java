@@ -22,6 +22,7 @@ public class User {
 
     public static boolean IsLoggedIn = false;
     public static int loggedInUserId = 0;
+    public  static String loggedInUserType;
 
     //constructor for set user data
     public  User(Integer id, String name, String email, String password, String phone, String nic, String userType, String street, String city, String country, Double  lat, Double  lng, String is_login, String is_vehicle_added, String reg_id, int isError, String errorMessage)

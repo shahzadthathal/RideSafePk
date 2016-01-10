@@ -56,17 +56,33 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings){
-            User.IsLoggedIn = false;
-            user = null;
-            startActivity(new Intent(getApplicationContext(), Login.class));
-            // Toast.makeText(getApplicationContext(),"Seting button clicked",Toast.LENGTH_SHORT).show();
-            //return true;
+        switch(item.getItemId())
+        {
+            case R.id.action_profile:
+                Toast.makeText(getApplicationContext(),"Action Profile", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_add_ride:
+                startActivity(new Intent(getApplicationContext(), BookRide.class));
+                break;
+            case R.id.action_view_rides:
+                startActivity(new Intent(getApplicationContext(), RideHistory.class));
+                break;
+            case R.id.action_logout:
+                User.IsLoggedIn = false;
+                user = null;
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean  onPrepareOptionsMenu(Menu menu) {
+        if (User.IsLoggedIn && User.loggedInUserType == "Driver") {
+            menu.findItem(R.id.action_add_ride).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 }

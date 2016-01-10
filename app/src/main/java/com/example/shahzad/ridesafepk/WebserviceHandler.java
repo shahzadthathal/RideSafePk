@@ -15,14 +15,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+
 
 /**
  * Created by shahzad on 12/12/2015.
@@ -40,18 +43,16 @@ public class WebserviceHandler {
 
     }
 
-    private String GetJsonFromUrl(String url) {
+    /*private String GetJsonFromUrl(String url) {
 
         // added by Sir Shahid, to avoid some http request stoped by java
         StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().build();
         StrictMode.setThreadPolicy(policy);
 
         // TODO Auto-generated method stub
+
         InputStream is =null;
         String result="";
-        JSONObject jArray=null;
-
-////////// http get
 
         try
         {
@@ -81,8 +82,7 @@ public class WebserviceHandler {
             String line = null;
             while ((line = reader.readLine()) != null)
             {
-                sb.append(line + "\n");
-               // sb.append(line).append("\n");
+                sb.append(line);
             }
             is.close();
             result = sb.toString();
@@ -93,109 +93,106 @@ public class WebserviceHandler {
             Log.e("log_tag", "Error Converting Result"+ e.toString());
         }
 
-        result=result.replace("\\u000d\\u000a", "\n");
-        result=result.replace("\"", "");
-        result = result.replace("/", "");
-        result = result.replaceAll("/", "");
-
-        //JSONObject json=new JSONObject(result);
-
         return result;
-        //return jArray;
-    }
 
-    private String GetJsonFromUrlNew(String urls) {
+    }*/
 
+    private String GetJsonFromUrl(String requestedUrl)
+    {
         // added by Sir Shahid, to avoid some http request stoped by java
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+        StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().build();
         StrictMode.setThreadPolicy(policy);
 
 
-        BufferedReader reader=null;
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
         try {
-            URL url = new URL(urls);
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-
-            // Read Server Response
-            while ((line = reader.readLine()) != null) {
-                // Append server response in string
+            URL url = new URL(requestedUrl);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.connect();
+            iStream = urlConnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+            StringBuffer sb = new StringBuffer();
+            String line = "";
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-            Content = sb.toString();
-        }
-        catch(Exception ex)
-        {
-            Error = ex.getMessage();
-        }
-        finally
-        {
+            data = sb.toString();
+            br.close();
+        } catch (Exception e) {
+            Log.d("Excep while read url", e.toString());
+        } finally {
+
             try
             {
-                reader.close();
+                iStream.close();
+                urlConnection.disconnect();
             }
-
             catch(Exception ex) {}
         }
-        return  Content;
+        return data;
     }
 
 
+    public ArrayList<RideModel> GetAllRides(Context context,Integer userId, String userType ) throws UnsupportedEncodingException {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "GetAllRides/" +   userId + "/" +  userType;
+        Log.d("GetAllRide url",url);
+        String jsonResponse = GetJsonFromUrl(url);
+        Log.d("GetAllRide Response",jsonResponse);
+        if(jsonResponse!="")
+        {
+            ArrayList<RideModel> rides = new ArrayList<RideModel>();
+            try {
+                JSONArray ridesArr = new JSONArray(jsonResponse);
+                for(int i=0; i < ridesArr.length(); i++) {
+                    JSONObject ride = ridesArr.getJSONObject(i);
+                    rides.add(new RideModel(ride.getInt("id"), ride.getInt("passengerID"), ride.getInt("driverID") ,  ride.getString("from_destination"), ride.getString("to_destination"), ride.getDouble("from_lat"), ride.getDouble("from_lng"),  ride.getDouble("to_lat"), ride.getDouble("to_lng"), ride.getInt("status")));
+                }
+                return rides;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public RideModel AddRide(Context context,RideModel obj) throws UnsupportedEncodingException
     {
-
-
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "AddRide/" + URLEncoder.encode(String.valueOf(obj.passengerID))  + "/" + URLEncoder.encode(String.valueOf(obj.driverID)) + "/" + URLEncoder.encode(String.valueOf(obj.from_destination), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(obj.to_destination), "UTF-8") +"/" + URLEncoder.encode(String.valueOf(obj.from_lat)) + "/" + URLEncoder.encode(String.valueOf(obj.from_lng)) +"/"+ URLEncoder.encode(String.valueOf(obj.to_lat)) +"/"+ URLEncoder.encode(String.valueOf(obj.to_lng));
-       // String jsonResult = GetJsonFromUrl(url);
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "AddRide/" + obj.passengerID  + "/" + obj.driverID + "/" +  URLEncoder.encode(String.valueOf(obj.from_destination), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(obj.to_destination), "UTF-8") +"/" + obj.from_lat + "/" + obj.from_lng +"/"+ obj.to_lat +"/"+ obj.to_lng;
+        URLEncoder.encode(url, "UTF-8");
         Log.d("Add Job Url", url);
-        String jsonResult = GetJsonFromUrlNew(url);
-        Log.d("Add job Response",jsonResult+"");
+        String jsonResult = GetJsonFromUrl(url);
+        Log.d("Add job Response", jsonResult + "");
         if (jsonResult != null) {
-            JSONObject jsonResponse;
+            JSONObject ride;
             try {
-                jsonResponse = new JSONObject(jsonResult);
-                Integer id       = jsonResponse.optInt("id");
-                Integer passengerID       = jsonResponse.optInt("passengerID");
-                Integer driverID       = jsonResponse.optInt("driverID");
-                String from_address     = jsonResponse.optString("from_destination").toString();
-                String to_address = jsonResponse.optString("to_destination").toString();
-                double from_lat = jsonResponse.optDouble("from_lat");
-                double from_lng = jsonResponse.optDouble("from_lng");
-                double to_lat = jsonResponse.optDouble("to_lat");
-                double to_lng = jsonResponse.optDouble("to_lng");
-                Integer status = jsonResponse.optInt("status");
+                ride = new JSONObject(jsonResult);
+                Integer id          = ride.getInt("id");
+                Integer passengerID = ride.getInt("passengerID");
+                Integer driverID = ride.getInt("driverID");
+                String from_address = ride.getString("from_destination");
+                String to_address   = ride.getString("to_destination");
+                double from_lat     = ride.getDouble("from_lat");
+                double from_lng     = ride.getDouble("from_lng");
+                double to_lat       = ride.getDouble("to_lat");
+                double to_lng = ride.getDouble("to_lng");
+                Integer status      = ride.getInt("status");
 
                // String date_created = jsonResponse.optString("date_created");
                 RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status);
-
-                // RideModel returnRide = new RideModel( ride.getInt("id"), ride.getInt("passengerID"), ride.getInt("driverID"), ride.getString("from_destination"), ride.getString("to_destination"), Double.parseDouble(ride.getString("from_lat")), Double.parseDouble(ride.getString("from_lng")), Double.parseDouble(ride.getString("to_lat")), Double.parseDouble(ride.getString("to_lng")), ride.getInt("status"));
                 return returnRide;
             }
             catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-
-        /*
-        if(jsonResult!="")
-        {
-            try {
-                JSONObject ride = new JSONObject(jsonResult);
-                RideModel returnRide = new RideModel( ride.getInt("id"), ride.getInt("passengerID"), ride.getInt("driverID"), ride.getString("from_destination"), ride.getString("to_destination"), Double.parseDouble(ride.getString("from_lat")), Double.parseDouble(ride.getString("from_lng")), Double.parseDouble(ride.getString("to_lat")), Double.parseDouble(ride.getString("to_lng")), ride.getInt("status"));
-                return returnRide;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        */
         return null;
     }
 
     public ArrayList<DriverModel> FindDriversRequest(Context context, double fromlat, double fromlng) throws UnsupportedEncodingException {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "GetDrivers/" +  URLEncoder.encode(String.valueOf(fromlat)) + "/" + URLEncoder.encode(String.valueOf(fromlng));
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "GetDrivers/" +   fromlat + "/" +  fromlng;
+        URLEncoder.encode(url, "UTF-8");
         Log.d("find driver url",url);
         String jsonResponse = GetJsonFromUrl(url);
         Log.d("Drivers Response",jsonResponse);
@@ -219,8 +216,7 @@ public class WebserviceHandler {
 
 
     public User Login(Context context, User loginUser) throws UnsupportedEncodingException {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "authenticate/" + loginUser.email + "/" + loginUser.password;
-        URLEncoder.encode(url);
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "authenticate/" +  URLEncoder.encode(String.valueOf(loginUser.email), "UTF-8") + "/" +  URLEncoder.encode(String.valueOf(loginUser.password), "UTF-8");
         Log.d("Login url",url);
         String jsonResult = GetJsonFromUrl(url);
         Log.d("Login Response",jsonResult);
@@ -239,7 +235,7 @@ public class WebserviceHandler {
 
     public User Register(Context context,User rUser) throws UnsupportedEncodingException
     {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "Register/" + Uri.encode(rUser.name) + "/" + rUser.email + "/" + rUser.password + "/" + rUser.phone +"/" + rUser.nic + "/" + rUser.userType;
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "Register/" + URLEncoder.encode(String.valueOf(rUser.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.email), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.password), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.phone), "UTF-8") +"/" + URLEncoder.encode(String.valueOf(rUser.nic), "UTF-8") + "/" + rUser.userType;
         String jsonResult = GetJsonFromUrl(url);
         Log.d("Register Response",jsonResult);
         if(jsonResult!="")
@@ -257,9 +253,8 @@ public class WebserviceHandler {
 
     public User saveAddress(Context context,User u) throws UnsupportedEncodingException
     {
-      String url = context.getResources().getString(R.string.SERVICE_URL)+ "Saveaddress/" +URLEncoder.encode(String.valueOf(u.id)) + "/" + URLEncoder.encode(String.valueOf(u.street)) + "/" + Uri.encode(u.city) + "/" + Uri.encode(u.country) +"/" + URLEncoder.encode(String.valueOf(u.lat)) + "/" + URLEncoder.encode(String.valueOf(u.lng));
-        //String url = context.getResources().getString(R.string.SERVICE_URL)+ "Saveaddress/" +URLEncoder.encode(String.valueOf(u.id)) + "/street102/" + Uri.encode(u.city) + "/" + Uri.encode(u.country) +"/3978522/799555";
-        Log.d("save address url",url);
+      String url = context.getResources().getString(R.string.SERVICE_URL)+ "Saveaddress/" +u.id + "/" + URLEncoder.encode(String.valueOf(u.street), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(u.city), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(u.country), "UTF-8") +"/" + u.lat + "/" + u.lng;
+        Log.d("save address url", url);
         String jsonResult = GetJsonFromUrl(url);
         Log.d("Save  address Response",jsonResult);
         if(jsonResult!="")
@@ -277,7 +272,7 @@ public class WebserviceHandler {
 
     public VehicleModel AddVehicle(Context context, VehicleModel vm)  throws UnsupportedEncodingException
     {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "AddVehicle/" +URLEncoder.encode(String.valueOf(vm.name)) + "/" + URLEncoder.encode(String.valueOf(vm.model_name)) + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name)) + "/" + URLEncoder.encode(String.valueOf(vm.ownerId));
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "AddVehicle/" + URLEncoder.encode(String.valueOf(vm.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(vm.model_name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name), "UTF-8") + "/" + vm.ownerId;
         Log.d("save vehicle url",url);
         String jsonResult = GetJsonFromUrl(url);
         Log.d("Save  vehicle Response",jsonResult);
@@ -296,7 +291,7 @@ public class WebserviceHandler {
 
     public VehicleModel UpdateVehicle(Context context, VehicleModel vm)  throws UnsupportedEncodingException
     {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "UpdateVehicle/"+ URLEncoder.encode(String.valueOf(vm.id))+"/" +URLEncoder.encode(String.valueOf(vm.name)) + "/" + URLEncoder.encode(String.valueOf(vm.model_name)) + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name)) + "/" + URLEncoder.encode(String.valueOf(vm.ownerId));
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "UpdateVehicle/"+ vm.id +"/" + URLEncoder.encode(String.valueOf(vm.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(vm.model_name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(vm.manufacturer_name), "UTF-8") + "/" + vm.ownerId;
         Log.d("update vehicle url",url);
         String jsonResult = GetJsonFromUrl(url);
         if(jsonResult!="")
@@ -314,7 +309,7 @@ public class WebserviceHandler {
 
     public VehicleModel GetVehicleDetail(Context context, int ownerID) throws UnsupportedEncodingException
     {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+"GetVehicleDetail/"+URLEncoder.encode(String.valueOf(ownerID));
+        String url = context.getResources().getString(R.string.SERVICE_URL)+"GetVehicleDetail/"+ ownerID;
         Log.d("get vehicle detail",url);
         String jsonResult = GetJsonFromUrl(url);
         if(jsonResult !="")
@@ -329,6 +324,5 @@ public class WebserviceHandler {
         }
         return  null;
     }
-
 
 }

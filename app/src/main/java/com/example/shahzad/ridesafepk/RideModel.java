@@ -37,17 +37,22 @@ public class RideModel {
 
     public  RideModel(Integer id, Integer passengerID, Integer driverID, String from_destination, String to_destination, double from_lat, double from_lng, double to_lat, double to_lng, int status)
     {
-        id = id;
-        passengerID = passengerID;
-        driverID = driverID;
-        from_destination = from_destination;
-        to_destination = to_destination;
-        from_lat = from_lat;
-        from_lng = from_lng;
-        to_lat = to_lat;
-        to_lng = to_lng;
-        status = status;
+        this.id = id;
+        this.passengerID = passengerID;
+        this.driverID = driverID;
+        this.from_destination = from_destination;
+        this.to_destination = to_destination;
+        this.from_lat = from_lat;
+        this.from_lng = from_lng;
+        this.to_lat = to_lat;
+        this.to_lng = to_lng;
+        this.status = status;
     }
 
+
+    @Override
+    public String toString() {
+        return  "From:"+ this.from_destination + ", To: " + this.to_destination + ", Driver:"+this.driverID +", Passenger:"+this.passengerID;
+    }
 
 }

@@ -22,4 +22,10 @@ public class GlobalSection {
 
     public  static RideModel rideDetailBeforeSave;
 
+    public static RideModel rideDetailAfterSave;
+
+    public  static ArrayList<RideModel> rideHistoryList;
+
+    public static  RideModel selectedRideDetail;
+
 }

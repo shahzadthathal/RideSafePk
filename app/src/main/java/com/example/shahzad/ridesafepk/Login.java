@@ -51,8 +51,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onStart() {
         super.onStart();
-        //if(User.IsLoggedIn ==true)
-          //  startActivity(new Intent(this, MainActivity.class));
+        if(User.IsLoggedIn ==true)
+            startActivity(new Intent(this, MainActivity.class));
     }
 
 
@@ -130,7 +130,6 @@ public void onClick(View v) {
             pDialog.dismiss();
             goToNextActivity(user);
             super.onPostExecute(user);
-
         }
     }
 
@@ -147,7 +146,8 @@ public void onClick(View v) {
 
            User.IsLoggedIn = true;
            User.loggedInUserId = user.id;
-         //  startActivity(new Intent(this, AddAddress.class));
+           User.loggedInUserType = user.userType;
+          // startActivity(new Intent(this, MainActivity.class));
 
            if (user.userType.equals("Driver")) {
                if(user.is_vehicle_added.equals("yes")){
