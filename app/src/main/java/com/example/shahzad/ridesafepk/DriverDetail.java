@@ -45,7 +45,7 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
         btnContactDriver = (Button) findViewById(R.id.btnContactDriver);
         btnContactDriver.setOnClickListener(this);
 
-        chronometer = (Chronometer) findViewById(R.id.chronometer);
+       // chronometer = (Chronometer) findViewById(R.id.chronometer);
 
 
         if(GlobalSection.driverDetail == null)
@@ -64,7 +64,7 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnContactDriver:
-                chronometer.start(); //chronometer.stop();
+                //chronometer.start(); //chronometer.stop();
 
                int customerid = User.loggedInUserId;
                int driverid =  GlobalSection.driverDetail.id;

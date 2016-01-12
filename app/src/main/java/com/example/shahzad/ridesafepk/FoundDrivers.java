@@ -2,6 +2,7 @@ package com.example.shahzad.ridesafepk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 public class FoundDrivers extends AppCompatActivity {
 
     /*ListView list;
-    String[] itemname ={
+    String[] drivername ={
             "Driver 1",
             "Driver 2",
             "Driver 2",
@@ -56,38 +57,33 @@ public class FoundDrivers extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found_drivers);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       // ArrayList<DriverModel> result = GlobalSection.driversList;
+        if(GlobalSection.driversList != null && GlobalSection.driversList.size() > 0){
 
-        if(GlobalSection.driversList.size() > 0){
-
-            for (DriverModel d : GlobalSection.driversList) {
+            for (DriverModel d : GlobalSection.driversList)
+            {
                 driverList.add(new DriverModel(d.id, d.name, d.phone, d.distance));
             }
 
+
             listView = (ListView)findViewById(R.id.listView);
 
-            myAdapter = new ArrayAdapter<DriverModel>(this, android.R.layout.simple_expandable_list_item_1, driverList);
-            listView.setAdapter(myAdapter);
+            //myAdapter = new ArrayAdapter<DriverModel>(this, android.R.layout.simple_expandable_list_item_1, driverList);
 
-           /* ArrayAdapter<DriverModel> result = new ArrayAdapter<DriverModel>(this, android.R.layout.simple_expandable_list_item_1){
+            myAdapter =  new ArrayAdapter<DriverModel>(getApplicationContext(),
+                    android.R.layout.simple_expandable_list_item_1, driverList) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
-                    View v = convertView;
-                    if (v == null) {
-                        LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        v = vi.inflate(R.layout.content_found_drivers, null);
-                    }
-                    //DriverModel currentEmployee = result.get(position);
-
-                    v.setTag(getMyIdForPosition(position));
-                    return convertView;
+                    View view = super.getView(position, convertView, parent);
+                    TextView text = (TextView) view.findViewById(android.R.id.text1);
+                    text.setTextColor(Color.WHITE);
+                    return view;
                 }
             };
-            */
+
+            listView.setAdapter(myAdapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -103,14 +99,6 @@ public class FoundDrivers extends AppCompatActivity {
 
                     DriverModel driverModel = new DriverModel(did,name,phone,distance);
                     GlobalSection.driverDetail = driverModel;
-
-                    /*
-                    Log.d("did ", did + "");
-                    Log.d("name ", name + "");
-                    Log.d("phone ", phone + "");
-                    Log.d("distance ", distance + "");
-                    Log.d("item", GlobalSection.SelectedDriverID + "");
-                    */
 
                     startActivity(new Intent(getApplicationContext(), DriverDetail.class));
                 }
@@ -171,8 +159,5 @@ public class FoundDrivers extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
 
 }

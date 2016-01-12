@@ -1,5 +1,6 @@
 package com.example.shahzad.ridesafepk;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -33,18 +35,10 @@ import java.util.List;
 public class RideDetail extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap googleMap;
-
-   // private static final LatLng LOWER_MANHATTAN = new LatLng(40.722543, -73.998585);
-   // private static final LatLng BROOKLYN_BRIDGE = new LatLng(40.7057, -73.9964);
-   // private static final LatLng WALL_STREET = new LatLng(40.7064, -74.0094);
-
     private static final LatLng FROM_DESTINATION = new LatLng(GlobalSection.selectedRideDetail.from_lat, GlobalSection.selectedRideDetail.from_lng);
     private static final LatLng TO_DESTINATION = new LatLng(GlobalSection.selectedRideDetail.to_lat,GlobalSection.selectedRideDetail.to_lng);
-
-
+    ProgressDialog pDialog;
     final String TAG = "RideDetailActivity";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +54,7 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
         else{
             Toast.makeText(getApplicationContext(), "Please wait, fetching rides", Toast.LENGTH_LONG).show();
         }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
-
 
 
     @Override
@@ -104,85 +88,56 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
         return super.onOptionsItemSelected(item);
     }
 
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap = googleMap;
+    public void onMapReady(GoogleMap gMap) {
+        googleMap = gMap;
         LatLng rideLatLng;
 
         MarkerOptions options = new MarkerOptions();
         options.position(FROM_DESTINATION);
         options.position(TO_DESTINATION);
         googleMap.addMarker(options);
+
         String url = getMapsApiDirectionsUrl();
         Log.d("direction url", url.toString());
+
         ReadTask downloadTask = new ReadTask();
         downloadTask.execute(url);
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FROM_DESTINATION, 13));
         addMarkers();
-
-
-        // Add a marker in Sydney and move the camera
-       /* if(GlobalSection.selectedRideDetail !=null){
-
-            Log.d("Ride Detail Page", GlobalSection.selectedRideDetail.from_destination + "");
-            Log.d("Ride Detail flat", GlobalSection.selectedRideDetail.from_lat + "");
-            Log.d("Ride Detail flng", GlobalSection.selectedRideDetail.from_lng + "");
-
-            rideLatLng = new LatLng(GlobalSection.selectedRideDetail.from_lat, GlobalSection.selectedRideDetail.from_lng);
-            mMap.addMarker(new MarkerOptions().position(rideLatLng).title(GlobalSection.selectedRideDetail.from_destination + ""));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(rideLatLng, 13));
-        }
-        else {
-            rideLatLng = new LatLng(-34, 151);
-            mMap.addMarker(new MarkerOptions().position(rideLatLng).title("Marker in Sydney"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(rideLatLng));
-        }
-        */
-
-
     }
 
 
     private String getMapsApiDirectionsUrl() {
-        String waypoints = "waypoints=optimize:true|"
-                + FROM_DESTINATION.latitude + "," + FROM_DESTINATION.longitude
-                + "|" + "|" + TO_DESTINATION.latitude + ","
-                + TO_DESTINATION.longitude ;
 
-
-        //String sensor = "sensor=false";
-       /// String params = URLEncoder.encode(waypoints) + "&" + URLEncoder.encode(sensor);
-
-        //String origin = "origin=" + LOWER_MANHATTAN.latitude + "," + LOWER_MANHATTAN.longitude;
-        //String destination = "destination=" + WALL_STREET.latitude + "," + WALL_STREET.longitude;
-        //String params = origin + "&" + destination + "&" + waypoints + "&" + sensor;
-
-        //String output = "json";
-        //String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + params;
-
-        String origin = "origin="+GlobalSection.selectedRideDetail.from_destination;
-        String destination = "destination="+GlobalSection.selectedRideDetail.to_destination;
+        String origin = "origin=" + GlobalSection.selectedRideDetail.from_lat + "," + GlobalSection.selectedRideDetail.from_lng;
+        String destination = "destination=" + GlobalSection.selectedRideDetail.to_lat + "," + GlobalSection.selectedRideDetail.to_lng;
         String mode= "mode=driving";
         String key = "key=AIzaSyCuZLeFjkp3x-cCwkoa_zh1-Qotgg04no8";
-
+        String params = origin + "&" + destination +"&"+ mode +"&"+ key;
         String output = "json";
-        String params = origin +"&"+ destination +"&"+ mode +"&"+ key;
-        //String url = "https://maps.googleapis.com/maps/api/directions/" + output +"?"+ URLEncoder.encode(params);
-        String url = "https://maps.googleapis.com/maps/api/directions/json?origin=6th+Road,+Rawalpindi,+Pakistan&destination=Street+102,+Islamabad,+Pakistan,&mode=driving&key=AIzaSyCuZLeFjkp3x-cCwkoa_zh1-Qotgg04no8";
-
-       // https://maps.googleapis.com/maps/api/directions/json?origin=75+9th+Ave+New+York,+NY&destination=MetLife+Stadium+1+MetLife+Stadium+Dr+East+Rutherford,+NJ+07073&key=YOUR_API_KEY
-
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + params;
         return url;
     }
 
     private void addMarkers() {
         if (googleMap != null) {
-            googleMap.addMarker(new MarkerOptions().position(FROM_DESTINATION).title("First Point"));
-            googleMap.addMarker(new MarkerOptions().position(TO_DESTINATION).title("Second Point"));
+            googleMap.addMarker(new MarkerOptions().position(FROM_DESTINATION).title(GlobalSection.selectedRideDetail.from_destination+"")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.from_destination)); //.showInfoWindow()
+            googleMap.addMarker(new MarkerOptions().position(TO_DESTINATION).title(GlobalSection.selectedRideDetail.to_destination+"")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.to_destination)); //.showInfoWindow()
         }
     }
 
     private class ReadTask extends AsyncTask<String, Void, String> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(RideDetail.this);
+            pDialog.setMessage("Fetching route detail...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
         @Override
         protected String doInBackground(String... url) {
             String data = "";
@@ -197,12 +152,22 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
 
         @Override
         protected void onPostExecute(String result) {
+            pDialog.dismiss();
             super.onPostExecute(result);
             new ParserTask().execute(result);
         }
     }
 
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(RideDetail.this);
+            pDialog.setMessage("Drawing a path on map...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
 
         @Override
         protected List<List<HashMap<String, String>>> doInBackground( String... jsonData) {
@@ -222,6 +187,7 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
 
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> routes) {
+
             ArrayList<LatLng> points = null;
             PolylineOptions polyLineOptions = null;
 
@@ -243,23 +209,24 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
                     }
 
                     polyLineOptions.addAll(points);
-                    polyLineOptions.width(2);
-                    polyLineOptions.color(Color.BLUE);
+                    polyLineOptions.width(8);
+                    polyLineOptions.color(Color.RED);
                 }
 
                 if (googleMap != null) {
                     googleMap.addPolyline(polyLineOptions);
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"googlr map id null", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"google map id null", Toast.LENGTH_LONG).show();
                     finish();
                 }
 
             }
             else{
-                Toast.makeText(getApplicationContext(),"No routes found", Toast.LENGTH_LONG).show();
-                finish();
+                Toast.makeText(getApplicationContext(),"Fetching routes detail", Toast.LENGTH_LONG).show();
             }
+
+            pDialog.dismiss();
         }
     }
 

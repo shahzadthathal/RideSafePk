@@ -20,9 +20,9 @@ import java.io.IOException;
 
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
-        Button btnLogin;
+        Button btnLogin, btnRegister;
         EditText txtEmail, txtPassword;
-        TextView tvForgetPassword, tvRegister;
+        TextView tvForgetPassword;
         ProgressDialog pDialog;
         User user;
 
@@ -37,13 +37,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         txtPassword = (EditText) findViewById(R.id.txtPassword);
 
         tvForgetPassword = (TextView) findViewById(R.id.tvForgetPassword);
-        tvRegister = (TextView) findViewById(R.id.tvRegister);
+        //tvRegister = (TextView) findViewById(R.id.tvRegister);
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
 
+        btnRegister = (Button) findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(this);
+
         tvForgetPassword.setOnClickListener(this);
-        tvRegister.setOnClickListener(this);
+
 
     }
 
@@ -79,7 +82,7 @@ public void onClick(View v) {
             }
         break;
 
-            case R.id.tvRegister:
+            case R.id.btnRegister:
             startActivity(new Intent(this, Register.class));
             break;
 
@@ -134,7 +137,6 @@ public void onClick(View v) {
     }
 
     public void goToNextActivity(User user){
-        Log.d("return user login.java",user +"");
 
        if(user == null){
            Toast.makeText(getApplicationContext(),"No User found",Toast.LENGTH_SHORT).show();
@@ -150,7 +152,7 @@ public void onClick(View v) {
           // startActivity(new Intent(this, MainActivity.class));
 
            if (user.userType.equals("Driver")) {
-               if(user.is_vehicle_added.equals("yes")){
+               if(user.is_vehicle_added.trim().equals("yes")){
                    startActivity(new Intent(getApplicationContext(), ViewVehicle.class));
                }
                else{

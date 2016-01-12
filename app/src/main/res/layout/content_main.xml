@@ -16,4 +16,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/main_welcome" />
+
+
+
+    <TextView
+        android:textStyle="bold|italic"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/textView"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:layout_weight="0.09"
+        android:textIsSelectable="false"
+        android:textSize="@dimen/abc_alert_dialog_button_bar_height"
+        android:background="@drawable/abc_btn_radio_to_on_mtrl_015"
+        android:backgroundTint="@android:color/holo_orange_dark" />
+
+
+
 </RelativeLayout>
