@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <permission
@@ -15,13 +14,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
 
     <uses-feature
         android:name="android.hardware.location"
@@ -106,6 +101,19 @@
         <activity
             android:name=".RideHistory"
             android:label="@string/title_activity_ride_history"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Logout"
+            android:label="@string/title_activity_logout"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".MyService"
+            android:enabled="true" />
+
+        <activity
+            android:name=".RideDetailNotify"
+            android:label="@string/title_activity_ride_detail_notify"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

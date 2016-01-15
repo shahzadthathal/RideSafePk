@@ -72,6 +72,7 @@ public class SelectAddress extends AppCompatActivity implements OnMapReadyCallba
                 String location = etLocation.getText().toString();
 
                 if(location!=null && !location.equals("")){
+                    ///location =  location+"&key=AIzaSyB_k92_bbhLDb-tITqqCMFv2Z4sYvTs0Og";
                     new GeocoderTask().execute(location);
                 }
             }
@@ -93,7 +94,8 @@ public class SelectAddress extends AppCompatActivity implements OnMapReadyCallba
         double dLatitude = 33.640388;
         double dLongitude = 73.088026;
         myMap.addMarker(new MarkerOptions().position(new LatLng(dLatitude, dLongitude))
-                .title("Default Location").draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                .title("Default Location").draggable(true)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(dLatitude, dLongitude), 5));
 
 
@@ -129,9 +131,15 @@ public class SelectAddress extends AppCompatActivity implements OnMapReadyCallba
             Geocoder geocoder = new Geocoder(getBaseContext());
             List<Address> addresses = null;
 
-            try {
+            try
+            {
                 // Getting a maximum of 1 Address that matches the input text
-                addresses = geocoder.getFromLocationName(locationName[0], 1);
+                //addresses = geocoder.getFromLocationName(locationName[0], 1);
+               addresses = geocoder.getFromLocationName(locationName[0], 1);
+                while (addresses.size()==0) {
+                    addresses = geocoder.getFromLocationName(locationName[0], 1);
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -143,6 +151,7 @@ public class SelectAddress extends AppCompatActivity implements OnMapReadyCallba
 
             if(addresses==null || addresses.size()==0){
                 Toast.makeText(getBaseContext(), "No Location found", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             // Clears all the existing markers on the map

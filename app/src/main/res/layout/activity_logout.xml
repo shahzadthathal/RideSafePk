@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.shahzad.ridesafepk.RideHistory">
+    tools:context="com.example.shahzad.ridesafepk.Logout">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_ride_history" />
+    <include layout="@layout/content_logout" />
 
 </android.support.design.widget.CoordinatorLayout>

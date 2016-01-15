@@ -13,7 +13,9 @@ public class User {
     String street, city,country;
     Double  lat, lng;
 
-    String is_login,is_vehicle_added,reg_id;
+    Integer is_login, is_vehicle_added;
+
+    String reg_id;
    // Date register_date;
     String register_date;
 
@@ -25,7 +27,7 @@ public class User {
     public  static String loggedInUserType;
 
     //constructor for set user data
-    public  User(Integer id, String name, String email, String password, String phone, String nic, String userType, String street, String city, String country, Double  lat, Double  lng, String is_login, String is_vehicle_added, String reg_id, int isError, String errorMessage)
+    public  User(Integer id, String name, String email, String password, String phone, String nic, String userType, String street, String city, String country, Double  lat, Double  lng, Integer is_login, Integer is_vehicle_added, String reg_id, int isError, String errorMessage)
     {
         this.id = id;
         this.name = name;

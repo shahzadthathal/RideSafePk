@@ -149,15 +149,20 @@ public void onClick(View v) {
            User.IsLoggedIn = true;
            User.loggedInUserId = user.id;
            User.loggedInUserType = user.userType;
-          // startActivity(new Intent(this, MainActivity.class));
+
 
            if (user.userType.equals("Driver")) {
-               if(user.is_vehicle_added.trim().equals("yes")){
-                   startActivity(new Intent(getApplicationContext(), ViewVehicle.class));
+               //startActivity(new Intent(this, MainActivity.class));
+
+              if(user.is_vehicle_added == 1){
+                  Intent i = new Intent(this, MyService.class);
+                  startService(i);
+                  startActivity(new Intent(getApplicationContext(), ViewVehicle.class));
                }
                else{
                    startActivity(new Intent(this, AddVehicle.class));
                }
+
 
            } else {
                startActivity(new Intent(this, BookRide.class));

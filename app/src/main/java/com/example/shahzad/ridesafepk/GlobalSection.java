@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class GlobalSection {
 
-    public static double FromLong,ToLong;
-    public static double FromLat,ToLat;
+    public static double FromLong,ToLong = 0;
+    public static double FromLat,ToLat = 0;
     public static String FromText;
     public static String ToText;
 

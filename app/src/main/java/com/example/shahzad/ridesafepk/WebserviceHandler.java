@@ -135,12 +135,74 @@ public class WebserviceHandler {
     }
 
 
+
+    public RideModel ChangeRideStatus(Context context, Integer rideId, Integer userId, Integer rstatus ) throws UnsupportedEncodingException {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "ChangeRideStatus/" + rideId  +"/"+  userId +"/"+ rstatus;
+        Log.d("ChangeRideStatus",url);
+        String jsonResult = GetJsonFromUrl(url);
+        if (jsonResult != null) {
+            JSONObject ride;
+            try {
+                ride = new JSONObject(jsonResult);
+                Integer id          = ride.getInt("id");
+                Integer passengerID = ride.getInt("passengerID");
+                Integer driverID = ride.getInt("driverID");
+                String from_address = ride.getString("from_destination");
+                String to_address   = ride.getString("to_destination");
+                double from_lat     = ride.getDouble("from_lat");
+                double from_lng     = ride.getDouble("from_lng");
+                double to_lat       = ride.getDouble("to_lat");
+                double to_lng = ride.getDouble("to_lng");
+                Integer status      = ride.getInt("status");
+
+                // String date_created = jsonResponse.optString("date_created");
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status);
+                return returnRide;
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public RideModel CheckNewRide(Context context,Integer userId, String userType ) throws UnsupportedEncodingException {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "CheckNewRide/" +   userId + "/" +  userType;
+        Log.d("Ride detail url",url);
+        String jsonResult = GetJsonFromUrl(url);
+        Log.d("Ride Detail service", jsonResult.toString());
+        if (jsonResult != null) {
+            JSONObject ride;
+            try {
+                ride = new JSONObject(jsonResult);
+                Integer id          = ride.getInt("id");
+                Integer passengerID = ride.getInt("passengerID");
+                Integer driverID = ride.getInt("driverID");
+                String from_address = ride.getString("from_destination");
+                String to_address   = ride.getString("to_destination");
+                double from_lat     = ride.getDouble("from_lat");
+                double from_lng     = ride.getDouble("from_lng");
+                double to_lat       = ride.getDouble("to_lat");
+                double to_lng = ride.getDouble("to_lng");
+                Integer status      = ride.getInt("status");
+
+                // String date_created = jsonResponse.optString("date_created");
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status);
+                return returnRide;
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public ArrayList<RideModel> GetAllRides(Context context,Integer userId, String userType ) throws UnsupportedEncodingException {
         String url = context.getResources().getString(R.string.SERVICE_URL)+ "GetAllRides/" +   userId + "/" +  userType;
         Log.d("GetAllRide url",url);
         String jsonResponse = GetJsonFromUrl(url);
         Log.d("GetAllRide Response",jsonResponse);
-        if(jsonResponse!="")
+        if(jsonResponse!="" && jsonResponse !="[]")
         {
             ArrayList<RideModel> rides = new ArrayList<RideModel>();
             try {
@@ -193,7 +255,7 @@ public class WebserviceHandler {
     public ArrayList<DriverModel> FindDriversRequest(Context context, double fromlat, double fromlng) throws UnsupportedEncodingException {
         String url = context.getResources().getString(R.string.SERVICE_URL)+ "GetDrivers/" +   fromlat + "/" +  fromlng;
         URLEncoder.encode(url, "UTF-8");
-        Log.d("find driver url",url);
+        Log.d("Find driver url",url);
         String jsonResponse = GetJsonFromUrl(url);
         Log.d("Drivers Response",jsonResponse);
         if(jsonResponse!="")
@@ -215,6 +277,18 @@ public class WebserviceHandler {
 
 
 
+    public boolean Logout(Context context, int userid)
+    {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "logout/" + userid ;
+        Log.d("Logout url",url);
+        String jsonResult = GetJsonFromUrl(url);
+        if(jsonResult !="")
+        {
+            return  true;
+        }
+        return true;
+    }
+
     public User Login(Context context, User loginUser) throws UnsupportedEncodingException {
         String url = context.getResources().getString(R.string.SERVICE_URL)+ "authenticate/" +  URLEncoder.encode(String.valueOf(loginUser.email), "UTF-8") + "/" +  URLEncoder.encode(String.valueOf(loginUser.password), "UTF-8");
         Log.d("Login url",url);
@@ -224,7 +298,7 @@ public class WebserviceHandler {
         {
             try {
                 JSONObject user = new JSONObject(jsonResult);
-                User returnUser = new User(user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"),Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getString("is_login"),user.getString("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
+                User returnUser = new User(user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"),Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"), user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
                 return returnUser;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -242,7 +316,7 @@ public class WebserviceHandler {
         {
             try {
                 JSONObject user = new JSONObject(jsonResult);
-                User returnUser = new User( user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getString("is_login"),user.getString("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
+                User returnUser = new User( user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
                 return returnUser;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -261,7 +335,7 @@ public class WebserviceHandler {
         {
             try {
                 JSONObject user = new JSONObject(jsonResult);
-                User returnUser = new User(user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")), user.getString("is_login"),user.getString("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
+                User returnUser = new User(user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")), user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
                 return returnUser;
             } catch (JSONException e) {
                 e.printStackTrace();

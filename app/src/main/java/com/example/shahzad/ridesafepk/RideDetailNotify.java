@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,7 +20,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -29,31 +27,31 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RideDetail extends AppCompatActivity implements OnMapReadyCallback {
+public class RideDetailNotify extends AppCompatActivity  implements OnMapReadyCallback {
 
     private GoogleMap googleMap;
     private static final LatLng FROM_DESTINATION = new LatLng(GlobalSection.selectedRideDetail.from_lat, GlobalSection.selectedRideDetail.from_lng);
     private static final LatLng TO_DESTINATION = new LatLng(GlobalSection.selectedRideDetail.to_lat,GlobalSection.selectedRideDetail.to_lng);
     ProgressDialog pDialog;
-    final String TAG = "RideDetailActivity";
 
     Button btnAccept, btnFinish, btnReject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ride_detail);
-       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_ride_detail_notify);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         btnAccept = (Button) findViewById(R.id.btnAccept);
         btnFinish = (Button) findViewById(R.id.btnFinish);
         btnReject = (Button) findViewById(R.id.btnReject);
+
 
         if(User.IsLoggedIn && User.loggedInUserType =="Passenger")
         {
@@ -81,12 +79,13 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
                 btnReject.setEnabled(false);
             }
 
-
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
+
         }
         else{
             Toast.makeText(getApplicationContext(), "There is and error, please select ride again", Toast.LENGTH_SHORT).show();
+
         }
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
@@ -117,49 +116,50 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
             }
         });
 
+
     }
 
-    public class ChangeRideStatus extends AsyncTask<Void, Void, RideModel> {
+    public class ChangeRideStatus extends AsyncTask<Void, Void, RideModel>{
 
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(RideDetail.this);
+            pDialog = new ProgressDialog(RideDetailNotify.this);
             pDialog.setMessage("Updating ride status...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
         }
-
-        protected RideModel doInBackground(Void... params) {
+        protected  RideModel doInBackground(Void... params){
 
             RideModel rideModel = null;
 
             try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 rideModel = service.ChangeRideStatus(getApplicationContext(), GlobalSection.selectedRideDetail.id, GlobalSection.selectedRideDetail.driverID, 1);
-            } catch (IOException e) {
+            }catch (IOException e) {
                 e.printStackTrace();
             }
 
-            return rideModel;
+            return  rideModel;
         }
 
         @Override
         protected void onPostExecute(RideModel rideModel) {
             pDialog.dismiss();
             super.onPostExecute(rideModel);
-            if (rideModel != null) {
+            if(rideModel != null) {
                 Log.i("ride status 1", GlobalSection.selectedRideDetail.status + "");
                 Log.i("ride status 1", rideModel.status + "");
                 GlobalSection.selectedRideDetail = rideModel;
 
-                if (rideModel.status == 1) {
+                if(rideModel.status ==1) {
                     btnAccept.setBackgroundColor(Color.GREEN);
                     btnAccept.setEnabled(false);
                 }
                 Toast.makeText(getApplicationContext(), "Job status has been changed", Toast.LENGTH_LONG).show();
             }
         }
+
     }
 
     @Override
@@ -197,30 +197,18 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
         googleMap = gMap;
         LatLng rideLatLng;
 
-        /*MarkerOptions options = new MarkerOptions();
+        MarkerOptions options = new MarkerOptions();
         options.position(FROM_DESTINATION);
         options.position(TO_DESTINATION);
         googleMap.addMarker(options);
-        */
 
         String url = getMapsApiDirectionsUrl();
-        //Log.d("direction url", url.toString());
-
+        Log.d("direction url", url.toString());
 
         ReadTask downloadTask = new ReadTask();
         downloadTask.execute(url);
 
-
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FROM_DESTINATION, 13));
-
-        /*googleMap.addPolyline(new PolylineOptions().geodesic(true)
-                .add(new LatLng(GlobalSection.selectedRideDetail.from_lat, GlobalSection.selectedRideDetail.from_lng))  // from
-                .add(new LatLng(GlobalSection.selectedRideDetail.to_lat, GlobalSection.selectedRideDetail.to_lng))  // to
-                //.add(new LatLng(21.291, -157.821))  // Hawaii
-                //.add(new LatLng(37.423, -122.091))  // Mountain View
-        );
-        */
-
         addMarkers();
     }
 
@@ -248,7 +236,7 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
 
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(RideDetail.this);
+            pDialog = new ProgressDialog(RideDetailNotify.this);
             pDialog.setMessage("Fetching route detail...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
@@ -279,7 +267,7 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
 
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(RideDetail.this);
+            pDialog = new ProgressDialog(RideDetailNotify.this);
             pDialog.setMessage("Drawing a path on map...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
@@ -346,6 +334,5 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
             pDialog.dismiss();
         }
     }
-
 
 }

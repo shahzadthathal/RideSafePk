@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.shahzad.ridesafepk.RideDetail"
-    tools:showIn="@layout/activity_ride_detail">
+    tools:context="com.example.shahzad.ridesafepk.RideDetailNotify"
+    tools:showIn="@layout/activity_ride_detail_notify">
 
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,8 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_marginBottom="100dp" />
-
+        android:layout_marginBottom="100dp"/>
 
 
     <LinearLayout
@@ -70,5 +69,6 @@
 
 
     </LinearLayout>
+
 
 </RelativeLayout>

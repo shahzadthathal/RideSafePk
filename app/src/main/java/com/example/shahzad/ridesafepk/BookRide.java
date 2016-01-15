@@ -92,7 +92,12 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
             @Override
             public void onClick(View v) {
 
-                new FindDrivers().execute();
+                if( GlobalSection.FromLat !=0 && GlobalSection.FromLong != 0) {
+                    new FindDrivers().execute();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Please select address properly", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

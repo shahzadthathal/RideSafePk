@@ -158,39 +158,41 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
             // Clears all the existing markers on the map
             myMap.clear();
 
-            // Adding Markers on Google Map for each matching address
-            for(int i=0;i<addresses.size();i++){
+            if(addresses !=null) {
+                // Adding Markers on Google Map for each matching address
+                for (int i = 0; i < addresses.size(); i++) {
 
-                Address address = (Address) addresses.get(i);
+                    Address address = (Address) addresses.get(i);
 
-                // Creating an instance of GeoPoint, to display in Google Map
-                latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    // Creating an instance of GeoPoint, to display in Google Map
+                    latLng = new LatLng(address.getLatitude(), address.getLongitude());
 
-                String addressText = String.format("%s, %s, %s",
-                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                        address.getLocality(),
-                        address.getCountryName());
+                    String addressText = String.format("%s, %s, %s",
+                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                            address.getLocality(),
+                            address.getCountryName());
 
-                markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                markerOptions.title(addressText);
-                markerOptions.snippet("This is your spot!");
-                markerOptions.draggable(true);
+                    markerOptions = new MarkerOptions();
+                    markerOptions.position(latLng);
+                    markerOptions.title(addressText);
+                    markerOptions.snippet("This is your spot!");
+                    markerOptions.draggable(true);
 
-                myMap.addMarker(markerOptions);
+                    myMap.addMarker(markerOptions);
 
-                // Locate the first location
-                if(i==0) {
-                    myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-                    //saveAddress(address);
+                    // Locate the first location
+                    if (i == 0) {
+                        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                        //saveAddress(address);
 
-                    String street =  address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
-                    String city = address.getLocality();
-                    String country = address.getCountryName();
-                    Double  lat =  address.getLatitude();
-                    Double  lng = address.getLongitude();
-                    int id = User.loggedInUserId;
-                    user = new User(id, street, city, country, lat, lng);
+                        String street = address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
+                        String city = address.getLocality();
+                        String country = address.getCountryName();
+                        Double lat = address.getLatitude();
+                        Double lng = address.getLongitude();
+                        int id = User.loggedInUserId;
+                        user = new User(id, street, city, country, lat, lng);
+                    }
                 }
             }
         }

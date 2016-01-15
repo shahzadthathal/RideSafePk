@@ -2,6 +2,7 @@ package com.example.shahzad.ridesafepk;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,9 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -37,16 +40,6 @@ public class RideHistory extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
         if(GlobalSection.rideHistoryList !=null && GlobalSection.rideHistoryList.size() > 0){
 
             for (RideModel r : GlobalSection.rideHistoryList) {
@@ -55,7 +48,17 @@ public class RideHistory extends AppCompatActivity {
 
             listView = (ListView)findViewById(R.id.listView);
 
-            myAdapter = new ArrayAdapter<RideModel>(this, android.R.layout.simple_expandable_list_item_1, rideList);
+            //myAdapter = new ArrayAdapter<RideModel>(this, android.R.layout.simple_expandable_list_item_1, rideList);
+            myAdapter =  new ArrayAdapter<RideModel>(getApplicationContext(),
+                    android.R.layout.simple_expandable_list_item_1, rideList) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    TextView text = (TextView) view.findViewById(android.R.id.text1);
+                    text.setTextColor(Color.WHITE);
+                    return view;
+                }
+            };
             listView.setAdapter(myAdapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
