@@ -19,6 +19,7 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,12 +45,36 @@ public class MyService extends Service {
             // WebServer Request URL
             //String serverURL = "http://172.16.0.64/webservice/index.php";
 
-                Log.d("My Service","running");
+                Log.d("My Service", "running");
 
                 String serverURL = getApplicationContext().getResources().getString(R.string.SERVICE_URL) +"CheckNewRide/3071/Driver";
                 //Log.d("My Service", serverURL+"");
+
+              if(User.IsLoggedIn)
+              {
+                  if(User.loggedInUserType.equals("Passenger"))
+                  {
+                    Log.d("My Service for ", User.loggedInUserType+"");
+                      new LongOperation().execute(serverURL);
+                  }
+                  else if(User.loggedInUserType.equals("Driver"))
+                  {
+                      Log.d("My Service for ", User.loggedInUserType+"");
+                      new LongOperation().execute(serverURL);
+                  }
+                  else{
+                      Log.d("My Service", "Unable to camparision");
+                  }
+              }
+              else{
+                  Log.d("My Service", "user is not logged in");
+
+                 stopSelf();
+
+              }
+
                 // Use AsyncTask execute Method To Prevent ANR Problem
-                new LongOperation().execute(serverURL);
+               // new LongOperation().execute(serverURL);
 
 
             //Log.d("My Service","running");
@@ -83,6 +108,8 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent,flags,startId);
         timerHandler.postDelayed(timerRunnable, 0);
+
+        // If we get killed, after returning from here, restart
         return START_STICKY;
     }
 
@@ -90,6 +117,7 @@ public class MyService extends Service {
     public void onDestroy() {
         super.onDestroy();
         timerHandler.removeCallbacks(timerRunnable);
+        //Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
 
     @Nullable
@@ -115,7 +143,10 @@ public class MyService extends Service {
             try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 rideModel = service.CheckNewRide(getApplicationContext(), User.loggedInUserId, User.loggedInUserType);
-                GlobalSection.selectedRideDetail = rideModel;
+                if(rideModel !=null)
+                {
+                    GlobalSection.selectedRideDetail = rideModel;
+                }
             }catch (IOException e) {
             e.printStackTrace();
             }
@@ -130,13 +161,26 @@ public class MyService extends Service {
 
                 GlobalSection.selectedRideDetail = rideModel;
 
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(MyService.this)
-                                // .setSmallIcon(R.drawable.ic_launcher)
-                                .setSmallIcon(R.drawable.cast_ic_notification_1)
-                                .setContentTitle("New Ride Request Found")
-                                .setContentText("You have a new ride request from " + rideModel.from_destination +
-                                        " and PassengerID: " + rideModel.passengerID);
+                String contentTitle = "";
+                String contentText = "";
+
+                if(User.loggedInUserType.equals("Driver"))
+                {
+                    contentTitle = "New Ride Request Found";
+                    contentText = "You have a new ride request from " + rideModel.from_destination + " and PassengerID: " + rideModel.passengerID;
+                }
+                else if(User.loggedInUserType.equals("Passenger"))
+                {
+                    contentTitle = "Ride Request Accepted";
+                    contentText = "Your ride request accepted by" + rideModel.driverID;
+                }
+
+                NotificationCompat.Builder  mBuilder = new NotificationCompat.Builder(MyService.this)
+                                    // .setSmallIcon(R.drawable.ic_launcher)
+                                    .setSmallIcon(R.drawable.cast_ic_notification_1)
+                                    .setContentTitle(contentTitle+ "")
+                                    .setContentText(contentText+ "");
+
                 Intent resultIntent = new Intent(MyService.this, RideDetail.class);
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(MyService.this);
                 stackBuilder.addParentStack(RideDetail.class);

@@ -159,4 +159,15 @@ public class FoundDrivers extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public boolean  onPrepareOptionsMenu(Menu menu) {
+        if (User.IsLoggedIn) {
+            if(User.loggedInUserType.equals("Driver")) {
+                menu.findItem(R.id.action_add_ride).setVisible(false);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 }

@@ -141,7 +141,13 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
 
             try {
                 // Getting a maximum of 3 Address that matches the input text
+                //addresses = geocoder.getFromLocationName(locationName[0], 1);
                 addresses = geocoder.getFromLocationName(locationName[0], 1);
+                while (addresses.size()==0) {
+                    addresses = geocoder.getFromLocationName(locationName[0], 1);
+                }
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

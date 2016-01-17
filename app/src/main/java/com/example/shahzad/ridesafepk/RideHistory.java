@@ -40,6 +40,8 @@ public class RideHistory extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //new GetAllRide().execute();
+
         if(GlobalSection.rideHistoryList !=null && GlobalSection.rideHistoryList.size() > 0){
 
             for (RideModel r : GlobalSection.rideHistoryList) {
@@ -120,6 +122,17 @@ public class RideHistory extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public boolean  onPrepareOptionsMenu(Menu menu) {
+        if (User.IsLoggedIn) {
+            if(User.loggedInUserType.equals("Driver")) {
+                menu.findItem(R.id.action_add_ride).setVisible(false);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
 

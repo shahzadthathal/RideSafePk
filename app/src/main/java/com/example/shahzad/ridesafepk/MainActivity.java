@@ -25,16 +25,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if(User.IsLoggedIn && User.loggedInUserType.equals("Driver")) {
-            Log.d("User is ", "driver");
+        /*
+        if(User.IsLoggedIn ) {
+            Log.d("User is ",User.loggedInUserType+"");
             Intent i = new Intent(this, MyService.class);
             startService(i);
         }
-        else{
-            Log.i("User is" ,"Passenger");
-        }
+        */
 
-        //scheduleAlarm();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -93,8 +91,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean  onPrepareOptionsMenu(Menu menu) {
-        if (User.IsLoggedIn && User.loggedInUserType == "Driver") {
-            menu.findItem(R.id.action_add_ride).setVisible(false);
+        if (User.IsLoggedIn) {
+            if(User.loggedInUserType.equals("Driver")) {
+                menu.findItem(R.id.action_add_ride).setVisible(false);
+            }
         }
         return super.onPrepareOptionsMenu(menu);
     }

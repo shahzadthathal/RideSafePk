@@ -115,6 +115,16 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
     }
 
 
+    @Override
+    public boolean  onPrepareOptionsMenu(Menu menu) {
+        if (User.IsLoggedIn) {
+            if(User.loggedInUserType.equals("Driver")) {
+                menu.findItem(R.id.action_add_ride).setVisible(false);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     public class VehicleDetail extends AsyncTask<Void, Void, VehicleModel> {
 
         protected void onPreExecute()

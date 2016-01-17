@@ -150,7 +150,6 @@ public void onClick(View v) {
            User.loggedInUserId = user.id;
            User.loggedInUserType = user.userType;
 
-
            if (user.userType.equals("Driver")) {
                //startActivity(new Intent(this, MainActivity.class));
 
@@ -160,11 +159,12 @@ public void onClick(View v) {
                   startActivity(new Intent(getApplicationContext(), ViewVehicle.class));
                }
                else{
-                   startActivity(new Intent(this, AddVehicle.class));
+                  startActivity(new Intent(this, AddVehicle.class));
                }
 
-
            } else {
+               Intent i = new Intent(this, MyService.class);
+               startService(i);
                startActivity(new Intent(this, BookRide.class));
            }
        }

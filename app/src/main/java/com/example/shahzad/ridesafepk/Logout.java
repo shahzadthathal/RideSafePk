@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -24,28 +25,11 @@ public class Logout extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        User.IsLoggedIn = false;
-        User.loggedInUserType = "";
+        new LogoutUser().execute();
 
-        GlobalSection.selectedRideDetail = null;
-        GlobalSection.rideDetailBeforeSave = null;
-        GlobalSection.driverDetail = null;
-        GlobalSection.driversList = null;
-        GlobalSection.FromText = "";
-        GlobalSection.ToText = "";
-        GlobalSection.SelectedDriverID = 0;
-        GlobalSection.rideDetailAfterSave = null;
-        GlobalSection.FromLat = 0;
-        GlobalSection.FromLong = 0;
-        GlobalSection.ToLat = 0;
-        GlobalSection.ToLong = 0;
-
-        startActivity(new Intent(getApplicationContext(), Login.class));
     }
 
-
-    /*
-    public  class LogoutUser extends AsyncTask<boolean, Void, Void> {
+    public  class LogoutUser extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -57,24 +41,53 @@ public class Logout extends AppCompatActivity {
             pDialog.show();
         }
 
-        protected  boolean doInBackground(Void... params){
+        protected  Boolean  doInBackground(Void... params){
 
+            Boolean res = false;
+
+            try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
-                boolean result = service.Logout(getApplicationContext(), User.loggedInUserId);
-                if(result!=false) {
-                    return  true;
+                Boolean  result  = service.Logout(getApplicationContext(), User.loggedInUserId);
+                if (result) {
+                    res = result;
                 }
-                else{
-                    return  false;
-                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return res;
         }
 
         @Override
-        protected void onPostExecute(boolean res) {
+        protected void onPostExecute(Boolean res) {
             super.onPostExecute(res);
             pDialog.dismiss();
 
+            if(res)
+            {
+
+                User.IsLoggedIn = false;
+                User.loggedInUserType = "";
+
+                GlobalSection.selectedRideDetail = null;
+                GlobalSection.rideDetailBeforeSave = null;
+                GlobalSection.driverDetail = null;
+                GlobalSection.driversList = null;
+                GlobalSection.rideHistoryList= null;
+
+                GlobalSection.FromText = "";
+                GlobalSection.ToText = "";
+                GlobalSection.SelectedDriverID = 0;
+                GlobalSection.rideDetailAfterSave = null;
+                GlobalSection.FromLat = 0;
+                GlobalSection.FromLong = 0;
+                GlobalSection.ToLat = 0;
+                GlobalSection.ToLong = 0;
+            }
+            else{
+                Toast.makeText(getApplicationContext(),"Unable to loged out, please try latter...", Toast.LENGTH_SHORT).show();
+            }
+
         }
-    }*/
+    }
 
 }

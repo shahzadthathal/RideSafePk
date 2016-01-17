@@ -192,12 +192,12 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
             }
         });
 
-
-
     }
 
     public class CustomListenerValidateDialogValue implements View.OnClickListener {
+
         private final Dialog dialog;
+
         public CustomListenerValidateDialogValue(Dialog dialog) {
             this.dialog = dialog;
         }
@@ -230,47 +230,57 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
         {
             _rideModel = rideModel;
         }
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(RideDetail.this);
-            pDialog.setMessage("Updating ride status...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        protected RideModel doInBackground(Void... params) {
-
-            try {
-                WebserviceHandler service = new WebserviceHandler(getApplicationContext());
-                _rideModel = service.FinishRide(getApplicationContext(), _rideModel);
-                GlobalSection.selectedRideDetail = _rideModel;
-            } catch (IOException e) {
-                e.printStackTrace();
+            protected void onPreExecute()
+            {
+                super.onPreExecute();
+                pDialog = new ProgressDialog(RideDetail.this);
+                pDialog.setMessage("Updating ride status...");
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(false);
+                pDialog.show();
             }
 
-            return _rideModel;
-        }
+            protected RideModel doInBackground(Void... params) {
 
-        @Override
-        protected void onPostExecute(RideModel rideModel) {
-            pDialog.dismiss();
-            super.onPostExecute(rideModel);
-            if (rideModel != null) {
-                Log.i("ride status 1", GlobalSection.selectedRideDetail.status + "");
-                Log.i("ride status 1", rideModel.status + "");
-                GlobalSection.selectedRideDetail = rideModel;
-
-                if (rideModel.status == 2) {
-                    btnAccept.setBackgroundColor(Color.GREEN);
-                    btnAccept.setEnabled(false);
-                    btnFinish.setBackgroundColor(Color.GREEN);
-                    btnFinish.setEnabled(false);
-                    btnReject.setEnabled(false);
+                try {
+                    WebserviceHandler service = new WebserviceHandler(getApplicationContext());
+                    _rideModel = service.FinishRide(getApplicationContext(), _rideModel);
+                    GlobalSection.selectedRideDetail = _rideModel;
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                Toast.makeText(getApplicationContext(), "Job status has been changed", Toast.LENGTH_LONG).show();
+
+                return _rideModel;
             }
-        }
+
+            @Override
+            protected void onPostExecute(RideModel rideModel)
+            {
+
+                pDialog.dismiss();
+                super.onPostExecute(rideModel);
+
+                if (rideModel != null)
+                {
+                    Log.i("ride status before", GlobalSection.selectedRideDetail.status + "");
+                    Log.i("ride status after", rideModel.status + "");
+                    GlobalSection.selectedRideDetail = rideModel;
+
+                    if (rideModel.status == 2)
+                    {
+                        btnAccept.setBackgroundColor(Color.GREEN);
+                        btnAccept.setEnabled(false);
+                        btnFinish.setBackgroundColor(Color.GREEN);
+                        btnFinish.setEnabled(false);
+                        btnReject.setEnabled(false);
+                    }
+
+                    Toast.makeText(getApplicationContext(), "Job status has been changed", Toast.LENGTH_LONG).show();
+
+                    // update GlobalSection.rideHistoryList
+                    new GetAllRideUpdated().execute();
+                }
+            }
     }
 
 
@@ -286,9 +296,7 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
         }
 
         protected RideModel doInBackground(String... params) {
-
             RideModel rideModel = null;
-
             try {
                 int rideStatus = Integer.parseInt(params[0]);
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
@@ -296,7 +304,6 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return rideModel;
         }
 
@@ -321,12 +328,53 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
                     btnAccept.setEnabled(false);
                     btnFinish.setEnabled(false);
                 }
-
-
                 Toast.makeText(getApplicationContext(), "Job status has been changed", Toast.LENGTH_LONG).show();
+
+                // update GlobalSection.rideHistoryList
+                new GetAllRideUpdated().execute();
             }
         }
     }
+
+    public  class GetAllRideUpdated extends AsyncTask<Void, Void, RideModel>
+    {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(RideDetail.this);
+            pDialog.setMessage("Fetching your rides...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        protected  RideModel doInBackground(Void... params)
+        {
+            RideModel rideModel = null;
+            try {
+                WebserviceHandler service = new WebserviceHandler(getApplicationContext());
+                // GlobalSection.driversList = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
+                GlobalSection.rideHistoryList = service.GetAllRides(getApplicationContext(), User.loggedInUserId, User.loggedInUserType);
+                if(GlobalSection.rideHistoryList!=null) {
+                    Log.e("Total Rides", GlobalSection.rideHistoryList.size() + "");
+                }
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+            return rideModel;
+        }
+        protected void onPostExecute(RideModel rideModel){
+            pDialog.dismiss();
+            super.onPostExecute(rideModel);
+            if(GlobalSection.rideHistoryList !=null) {
+                //startActivity(new Intent(getApplicationContext(), RideHistory.class));
+            }
+            else{
+               // Toast.makeText(getApplicationContext(), "No rides found...", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -356,6 +404,17 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public boolean  onPrepareOptionsMenu(Menu menu) {
+        if (User.IsLoggedIn) {
+            if(User.loggedInUserType.equals("Driver")) {
+                menu.findItem(R.id.action_add_ride).setVisible(false);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     public void onMapReady(GoogleMap gMap) {

@@ -243,40 +243,46 @@ public class WebserviceHandler {
         if (jsonResult != null) {
             JSONObject ride;
             try {
+
                 ride = new JSONObject(jsonResult);
-                Integer id          = ride.getInt("id");
-                Integer passengerID = ride.getInt("passengerID");
-                Integer driverID = ride.getInt("driverID");
-                String from_address = ride.getString("from_destination");
-                String to_address   = ride.getString("to_destination");
-                double from_lat     = ride.getDouble("from_lat");
-                double from_lng     = ride.getDouble("from_lng");
-                double to_lat       = ride.getDouble("to_lat");
-                double to_lng = ride.getDouble("to_lng");
-                Integer status      = ride.getInt("status");
-                String review = ride.getString("review");
-                //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
-                //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
+                if(!ride.isNull("id"))
+                {
 
-                float amount, rating;
+                    Integer id = ride.getInt("id");
+                    Integer passengerID = ride.getInt("passengerID");
+                    Integer driverID = ride.getInt("driverID");
+                    String from_address = ride.getString("from_destination");
+                    String to_address = ride.getString("to_destination");
+                    double from_lat = ride.getDouble("from_lat");
+                    double from_lng = ride.getDouble("from_lng");
+                    double to_lat = ride.getDouble("to_lat");
+                    double to_lng = ride.getDouble("to_lng");
+                    Integer status = ride.getInt("status");
+                    String review = ride.getString("review");
+                    //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
+                    //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
 
-                if(ride.getString("amount").equals("") || ride.isNull("amount")) {
-                    amount =  0;
+                    float amount, rating;
+
+                    if (ride.getString("amount").equals("") || ride.isNull("amount")) {
+                        amount = 0;
+                    } else {
+                        amount = Float.valueOf(ride.getString("amount"));
+                    }
+
+                    if (ride.getString("rating").equals("") || ride.isNull("rating")) {
+                        rating = 0;
+                    } else {
+                        rating = Float.valueOf(ride.getString("rating"));
+                    }
+
+                    // String date_created = jsonResponse.optString("date_created");
+                    RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat, to_lng, status, amount, review, rating);
+                    return returnRide;
                 }
                 else{
-                    amount = Float.valueOf(ride.getString("amount"));
+                    return  null;
                 }
-
-                if(ride.getString("rating").equals("") || ride.isNull("rating")) {
-                    rating = 0;
-                }
-                else{
-                    rating = Float.valueOf(ride.getString("rating"));
-                }
-
-                // String date_created = jsonResponse.optString("date_created");
-                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating);
-                return returnRide;
             }
             catch (JSONException e) {
                 e.printStackTrace();
@@ -403,18 +409,17 @@ public class WebserviceHandler {
 
 
 
-    public boolean Logout(Context context, int userid)
-    {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "logout/" + userid ;
-        Log.d("Logout url",url);
+    public Boolean  Logout(Context context, int userid) {
+        String url = context.getResources().getString(R.string.SERVICE_URL) + "logout/" + userid;
+        Log.d("Logout url", url);
         String jsonResult = GetJsonFromUrl(url);
-        if(jsonResult !="")
-        {
-            return  true;
+        Log.d("logout res", jsonResult + "");
+        if (jsonResult != null && jsonResult.contains("true")) {
+            return true;
         }
-        return true;
+        else
+            return false;
     }
-
     public User Login(Context context, User loginUser) throws UnsupportedEncodingException {
         String url = context.getResources().getString(R.string.SERVICE_URL)+ "authenticate/" +  URLEncoder.encode(String.valueOf(loginUser.email), "UTF-8") + "/" +  URLEncoder.encode(String.valueOf(loginUser.password), "UTF-8");
         Log.d("Login url",url);
