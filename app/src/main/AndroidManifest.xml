@@ -114,6 +114,10 @@
         <activity
             android:name=".RideDetailNotify"
             android:label="@string/title_activity_ride_detail_notify"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UpdateProfile"
+            android:label="@string/title_activity_update_profile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

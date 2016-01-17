@@ -131,12 +131,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 User result = service.Register(getApplicationContext(), user);
                 if(result!=null) {
                     returnUser = new User(result.id, result.name, result.email, result.password, result.phone, result.nic, result.userType, result.street, result.city, result.country,result.lat, result.lng, result.is_login, result.is_vehicle_added, result.reg_id,result.isError, result.errorMessage);
-                  //  User.IsLoggedIn=true;
-                    //User.loggedInUserId = result.id;
                 }
             }catch (IOException e) {
                 e.printStackTrace();
-
             }
 
             return  returnUser;

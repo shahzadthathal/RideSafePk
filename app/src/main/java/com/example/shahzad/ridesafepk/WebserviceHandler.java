@@ -456,6 +456,26 @@ public class WebserviceHandler {
         return null;
     }
 
+    public User UpdateProfile(Context context,User rUser) throws UnsupportedEncodingException
+    {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "UpdateProfile/"+ rUser.id +"/"+ URLEncoder.encode(String.valueOf(rUser.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.email), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.password), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.phone), "UTF-8") +"/" + URLEncoder.encode(String.valueOf(rUser.nic), "UTF-8");
+        Log.d("Update Profile Url",url);
+        String jsonResult = GetJsonFromUrl(url);
+        Log.d("Update Profile Response",jsonResult);
+        if(jsonResult!="")
+        {
+            try {
+                JSONObject user = new JSONObject(jsonResult);
+                User returnUser = new User( user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
+                return returnUser;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
     public User saveAddress(Context context,User u) throws UnsupportedEncodingException
     {
       String url = context.getResources().getString(R.string.SERVICE_URL)+ "Saveaddress/" +u.id + "/" + URLEncoder.encode(String.valueOf(u.street), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(u.city), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(u.country), "UTF-8") +"/" + u.lat + "/" + u.lng;

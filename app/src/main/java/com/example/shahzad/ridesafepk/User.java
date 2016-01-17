@@ -76,6 +76,18 @@ public class User {
 
     }
 
+
+    //constructor for update  user profile
+    public  User(Integer id, String name, String email, String password, String phone, String nic)
+    {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.nic = nic;
+    }
+
     public static int userId(){
         if(User.IsLoggedIn == true)
             return loggedInUserId;

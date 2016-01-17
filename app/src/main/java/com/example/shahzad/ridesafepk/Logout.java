@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -64,6 +65,7 @@ public class Logout extends AppCompatActivity {
 
             if(res)
             {
+                Log.d("Logout.java",res+"");
 
                 User.IsLoggedIn = false;
                 User.loggedInUserType = "";
@@ -82,6 +84,9 @@ public class Logout extends AppCompatActivity {
                 GlobalSection.FromLong = 0;
                 GlobalSection.ToLat = 0;
                 GlobalSection.ToLong = 0;
+
+                Toast.makeText(getApplicationContext(),"Logged out from app...", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), Login.class));
             }
             else{
                 Toast.makeText(getApplicationContext(),"Unable to loged out, please try latter...", Toast.LENGTH_SHORT).show();
