@@ -463,6 +463,7 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
 
     private void addMarkers() {
         if (googleMap != null) {
+            googleMap.clear();
             googleMap.addMarker(new MarkerOptions().position(FROM_DESTINATION).title(GlobalSection.selectedRideDetail.from_destination+""));// .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.from_destination)); //.showInfoWindow()
             googleMap.addMarker(new MarkerOptions().position(TO_DESTINATION).title(GlobalSection.selectedRideDetail.to_destination+"")); //.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.to_destination)); //.showInfoWindow()
         }

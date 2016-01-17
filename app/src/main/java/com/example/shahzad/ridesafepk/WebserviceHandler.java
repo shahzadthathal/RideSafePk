@@ -174,8 +174,11 @@ public class WebserviceHandler {
                     rating = Float.valueOf(ride.getString("rating"));
                 }
 
+                String driver_name = ride.getString("driver_name");
+                String passenger_name = ride.getString("passenger_name");
+
                 // String date_created = jsonResponse.optString("date_created");
-                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating);
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating, driver_name, passenger_name);
                 return returnRide;
             }
             catch (JSONException e) {
@@ -223,9 +226,11 @@ public class WebserviceHandler {
                     rating = Float.valueOf(ride.getString("rating"));
                 }
 
+                String driver_name = ride.getString("driver_name");
+                String passenger_name = ride.getString("passenger_name");
 
                 // String date_created = jsonResponse.optString("date_created");
-                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating);
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating, driver_name, passenger_name);
                 return returnRide;
             }
             catch (JSONException e) {
@@ -276,8 +281,11 @@ public class WebserviceHandler {
                         rating = Float.valueOf(ride.getString("rating"));
                     }
 
+                    String driver_name = ride.getString("driver_name");
+                    String passenger_name = ride.getString("passenger_name");
+
                     // String date_created = jsonResponse.optString("date_created");
-                    RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat, to_lng, status, amount, review, rating);
+                    RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat, to_lng, status, amount, review, rating, driver_name, passenger_name);
                     return returnRide;
                 }
                 else{
@@ -321,7 +329,10 @@ public class WebserviceHandler {
                         rating = Float.valueOf(ride.getString("rating"));
                     }
 
-                    rides.add(new RideModel(ride.getInt("id"), ride.getInt("passengerID"), ride.getInt("driverID") ,  ride.getString("from_destination"), ride.getString("to_destination"), ride.getDouble("from_lat"), ride.getDouble("from_lng"),  ride.getDouble("to_lat"), ride.getDouble("to_lng"), ride.getInt("status"), amount, ride.getString("review"), rating));
+                    String driver_name = ride.getString("driver_name");
+                    String passenger_name = ride.getString("passenger_name");
+
+                    rides.add(new RideModel(ride.getInt("id"), ride.getInt("passengerID"), ride.getInt("driverID") ,  ride.getString("from_destination"), ride.getString("to_destination"), ride.getDouble("from_lat"), ride.getDouble("from_lng"),  ride.getDouble("to_lat"), ride.getDouble("to_lng"), ride.getInt("status"), amount, ride.getString("review"), rating, driver_name, passenger_name));
                 }
                 return rides;
             } catch (JSONException e) {
@@ -353,7 +364,6 @@ public class WebserviceHandler {
                 double to_lng = ride.getDouble("to_lng");
                 Integer status      = ride.getInt("status");
                 String review = ride.getString("review");
-
                 //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
                 //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
 
@@ -373,8 +383,11 @@ public class WebserviceHandler {
                     rating = Float.valueOf(ride.getString("rating"));
                 }
 
+                String driver_name = ride.getString("driver_name");
+                String passenger_name = ride.getString("passenger_name");
+
                // String date_created = jsonResponse.optString("date_created");
-                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status, amount , review, rating);
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status, amount , review, rating, driver_name, passenger_name);
                 return returnRide;
             }
             catch (JSONException e) {

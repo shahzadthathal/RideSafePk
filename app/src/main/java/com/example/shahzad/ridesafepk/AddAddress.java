@@ -2,11 +2,13 @@ package com.example.shahzad.ridesafepk;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -40,6 +42,8 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
     ProgressDialog pDialog;
     User user;
 
+    EditText etLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +67,8 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
             }
         });
 
+        etLocation = (EditText) findViewById(R.id.et_location);
+
 
         // Getting a reference to the map
         //myMap = supportMapFragment.getMap();
@@ -76,7 +82,7 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
             @Override
             public void onClick(View v) {
                 // Getting reference to EditText to get the user input location
-                EditText etLocation = (EditText) findViewById(R.id.et_location);
+
 
                 // Getting user input location
                 String location = etLocation.getText().toString();
@@ -97,9 +103,30 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
 
         myMap = retMap;
         myMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-       // myMap.setMyLocationEnabled(true);
 
+        myMap.setMyLocationEnabled(true);
 
+        GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange (Location location) {
+                LatLng loc = new LatLng (location.getLatitude(), location.getLongitude());
+
+                myMap.clear();
+                myMap.addMarker(new MarkerOptions().position(loc)
+                                .title("Lat" + location.getLatitude() + ", Lng" + location.getLongitude())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.from_destination))
+                                .draggable(true)
+                );
+                myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 16.0f));
+
+                new GetAddressTask().execute(location);
+            }
+
+        };
+        myMap.setOnMyLocationChangeListener(myLocationChangeListener);
+
+        /*
         double dLatitude = 33.640388;
         double dLongitude = 73.088026;
         myMap.addMarker(new MarkerOptions().position(new LatLng(dLatitude, dLongitude))
@@ -126,9 +153,91 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
             }
 
         });
+        */
 
     }
 
+    public  class GetAddressTask extends AsyncTask<Location, Void, String> {
+
+
+        /*
+         * Get a Geocoder instance, get the latitude and longitude look up the
+         * address, and return it
+         *
+              * @params params One or more Location objects
+         *
+         * @return A string containing the address of the current location, or an
+         * empty string if no address can be found, or an error message
+         */
+        @Override
+        protected String doInBackground(Location... params) {
+            Geocoder geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
+            // Get the current location from the input parameter list
+            Location loc = params[0];
+            // Create a list to contain the result address
+            List<Address> addresses = null;
+            try {
+			/*
+			 * Return 1 address.
+			 */
+                addresses = geocoder.getFromLocation(loc.getLatitude(),
+                        loc.getLongitude(), 1);
+            } catch (IOException e1) {
+                Log.e("LocationSampleActivity", "IO Exception in getFromLocation()");
+                e1.printStackTrace();
+                return ("IO Exception trying to get address");
+            } catch (IllegalArgumentException e2) {
+                // Error message to post in the log
+                String errorString = "Illegal arguments "
+                        + Double.toString(loc.getLatitude()) + " , "
+                        + Double.toString(loc.getLongitude())
+                        + " passed to address service";
+                Log.e("LocationSampleActivity", errorString);
+                e2.printStackTrace();
+                return errorString;
+            }
+            // If the reverse geocode returned an address
+            if (addresses != null && addresses.size() > 0) {
+                // Get the first address
+                Address address = addresses.get(0);
+			/*
+			 * Format the first line of address (if available), city, and
+			 * country name.
+			 */
+                String addressText = String.format(
+                        "%s, %s, %s",
+                        // If there's a street address, add it
+                        address.getMaxAddressLineIndex() > 0 ? address
+                                .getAddressLine(0) : "",
+                        // Locality is usually a city
+                        address.getLocality(),
+                        // The country of the address
+                        address.getCountryName());
+
+
+                String street = address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
+                String city = address.getLocality();
+                String country = address.getCountryName();
+                Double lat = address.getLatitude();
+                Double lng = address.getLongitude();
+                int id = User.loggedInUserId;
+                user = new User(id, street, city, country, lat, lng);
+
+                // Return the text
+                return addressText;
+            } else {
+                return "No address found";
+            }
+        }
+
+        @Override
+        protected  void onPostExecute(String address)
+        {
+
+            etLocation.setText(address.toString());
+        }
+
+    }
 
     // An AsyncTask class for accessing the GeoCoding Web Service
     private class GeocoderTask extends AsyncTask<String, Void, List<Address>>{

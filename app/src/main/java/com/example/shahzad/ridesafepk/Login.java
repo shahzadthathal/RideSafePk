@@ -71,6 +71,8 @@ public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"Please enter valid email address",Toast.LENGTH_SHORT).show();
                 return;
             }
+
+
             if (AppStatus.getInstance(this).isOnline()) {
 
                 user = new User(email,password);
@@ -78,8 +80,8 @@ public void onClick(View v) {
 
             } else {
                 Toast.makeText(this, "You are not online!!!!", Toast.LENGTH_SHORT).show();
-                Log.v("Login.java", "############################You are not online!!!!");
             }
+
         break;
 
             case R.id.btnRegister:
@@ -149,6 +151,8 @@ public void onClick(View v) {
            User.IsLoggedIn = true;
            User.loggedInUserId = user.id;
            User.loggedInUserType = user.userType;
+
+           GlobalSection.userProfile = user;
 
            if (user.userType.equals("Driver")) {
                //startActivity(new Intent(this, MainActivity.class));

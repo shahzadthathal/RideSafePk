@@ -45,7 +45,7 @@ public class RideHistory extends AppCompatActivity {
         if(GlobalSection.rideHistoryList !=null && GlobalSection.rideHistoryList.size() > 0){
 
             for (RideModel r : GlobalSection.rideHistoryList) {
-                rideList.add(new RideModel(r.id, r.passengerID, r.driverID, r.from_destination, r.to_destination, r.from_lat, r.from_lng, r.to_lat, r.to_lng, r.status, r.amount, r.review, r.rating));
+                rideList.add(new RideModel(r.id, r.passengerID, r.driverID, r.from_destination, r.to_destination, r.from_lat, r.from_lng, r.to_lat, r.to_lng, r.status, r.amount, r.review, r.rating, r.driver_name, r.passenger_name));
             }
 
             listView = (ListView)findViewById(R.id.listView);
@@ -82,7 +82,10 @@ public class RideHistory extends AppCompatActivity {
                     String review = myAdapter.getItem(position).review;
                     float rating = myAdapter.getItem(position).rating;
 
-                    RideModel rideModel = new RideModel(rid, pid, did, from_destination, to_destination, from_lat, from_lng, to_lat, to_lng, status, amount, review, rating);
+                    String driver_name = myAdapter.getItem(position).driver_name;
+                    String passenger_name = myAdapter.getItem(position).passenger_name;
+
+                    RideModel rideModel = new RideModel(rid, pid, did, from_destination, to_destination, from_lat, from_lng, to_lat, to_lng, status, amount, review, rating, driver_name, passenger_name);
                     GlobalSection.selectedRideDetail = rideModel;
                     startActivity(new Intent(getApplicationContext(), RideDetail.class));
                 }

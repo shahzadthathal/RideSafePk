@@ -45,13 +45,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    protected  void onResume()
+    {
+        super.onResume();
+    }
+
     // added by shahzad checkc user is loged in or not
     @Override
     protected void onStart() {
-        super.onStart();
+
         if(authenticate() !=true)
           startActivity(new Intent(this,Login.class));
+        super.onStart();
     }
+
+
 
     private boolean authenticate()
     {
@@ -74,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId())
         {
             case R.id.action_profile:
-                Toast.makeText(getApplicationContext(),"Action Profile", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplication(), UpdateProfile.class));
                 break;
             case R.id.action_add_ride:
                 startActivity(new Intent(getApplicationContext(), BookRide.class));

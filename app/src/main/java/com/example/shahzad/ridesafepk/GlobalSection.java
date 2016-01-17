@@ -28,4 +28,7 @@ public class GlobalSection {
 
     public static  RideModel selectedRideDetail;
 
+
+    public static User userProfile;
+
 }

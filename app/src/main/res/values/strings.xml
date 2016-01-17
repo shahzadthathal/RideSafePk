@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Ride Safe Pk</string>
+
     <string name="SERVICE_URL">http://192.168.1.3:81/WebService/BIITAlumni.svc/</string>
  <!--  <string name="SERVICE_URL">http://10.0.2.2:81/WebService/BIITAlumni.svc/</string>-->
 
 
- <string name="action_settings">Setting</string>
+<!-- <string name="action_settings">Setting</string> -->
  <string name="action_profile">Profile</string>
  <string name="action_add_ride">Book Ride</string>
  <string name="action_view_rides">View Rides</string>
@@ -34,7 +35,7 @@
  <string name="title_activity_ride_history">Ride History</string>
  <string name="title_activity_logout">Logout</string>
  <string name="title_activity_ride_detail_notify">New Ride Notify</string>
-    <string name="title_activity_update_profile">UpdateProfile</string>
+    <string name="title_activity_update_profile">Update Profile</string>
 
 
 </resources>

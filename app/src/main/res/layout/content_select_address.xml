@@ -29,6 +29,16 @@ tools:showIn="@layout/activity_select_address">
 
 </RelativeLayout>
 
+    <!--
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        />
+
+    -->
+
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/map"
     android:layout_width="match_parent"

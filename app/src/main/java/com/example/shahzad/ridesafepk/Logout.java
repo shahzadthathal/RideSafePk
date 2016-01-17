@@ -70,6 +70,8 @@ public class Logout extends AppCompatActivity {
                 User.IsLoggedIn = false;
                 User.loggedInUserType = "";
 
+                GlobalSection.userProfile = null;
+
                 GlobalSection.selectedRideDetail = null;
                 GlobalSection.rideDetailBeforeSave = null;
                 GlobalSection.driverDetail = null;
@@ -89,7 +91,8 @@ public class Logout extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
             else{
-                Toast.makeText(getApplicationContext(),"Unable to loged out, please try latter...", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(),"Unable to loged out, please try latter...", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), Login.class));
             }
 
         }

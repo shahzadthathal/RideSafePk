@@ -21,8 +21,10 @@ public class RideModel {
 
     String review;
 
+    String driver_name, passenger_name;
 
 
+    // constructor for saving job amount and rating detail
     public  RideModel(Integer id, float amount, float rating, String review)
     {
         this.id = id;
@@ -31,7 +33,7 @@ public class RideModel {
         this.review = review;
     }
 
-    //save first time job without acceptene of any driver
+    //save first time job without acceptence of any driver
 
     public  RideModel(Integer passengerID, Integer driverID, String from_destination, String to_destination, double from_lat, double from_lng, double to_lat, double to_lng)
     {
@@ -47,7 +49,7 @@ public class RideModel {
 
     //save ride detail after recored added into db
 
-    public  RideModel(Integer id, Integer passengerID, Integer driverID, String from_destination, String to_destination, double from_lat, double from_lng, double to_lat, double to_lng, int status, float amount, String review, float rating)
+    public  RideModel(Integer id, Integer passengerID, Integer driverID, String from_destination, String to_destination, double from_lat, double from_lng, double to_lat, double to_lng, int status, float amount, String review, float rating, String driver_name, String passenger_name)
     {
         this.id = id;
         this.passengerID = passengerID;
@@ -62,12 +64,14 @@ public class RideModel {
         this.amount = amount;
         this.review = review;
         this.rating = rating;
+        this.driver_name = driver_name;
+        this.passenger_name = passenger_name;
     }
 
 
     @Override
     public String toString() {
-        return  "From:"+ this.from_destination + ", To: " + this.to_destination + ", Driver:"+this.driverID +", Passenger:"+this.passengerID;
+        return  "From:"+ this.from_destination + ", To: " + this.to_destination + ", Driver:"+this.driver_name +", Passenger:"+this.passenger_name;
     }
 
 }

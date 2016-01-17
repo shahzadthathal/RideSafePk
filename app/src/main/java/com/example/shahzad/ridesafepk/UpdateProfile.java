@@ -44,6 +44,23 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
         etPassword = (EditText) findViewById(R.id.etPassword);
         etPhone = (EditText) findViewById(R.id.etPhone);
         etNic = (EditText) findViewById(R.id.etNic);
+
+        if(GlobalSection.userProfile !=null)
+        {
+
+            etName.setText(GlobalSection.userProfile.name.toString());
+            etEmail.setText(GlobalSection.userProfile.email.toString());
+            etPassword.setText(GlobalSection.userProfile.password.toString());
+            etPhone.setText(GlobalSection.userProfile.phone.toString());
+            etNic.setText(GlobalSection.userProfile.nic.toString());
+
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"Please login again.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplication(), Login.class));
+        }
+
+
         btnUpdateProfile = (Button) findViewById(R.id.btnUpdateProfile);
         btnUpdateProfile.setOnClickListener(this);
 
@@ -52,7 +69,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId())
         {
-               case R.id.btnRegister:
+               case R.id.btnUpdateProfile:
                 String name     = etName.getText().toString();
                 String email    = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
@@ -157,7 +174,6 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
             try {
 
-                Log.d("regiestring user", user.userType);
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 User result = service.UpdateProfile(getApplicationContext(), _user);
                 if(result!=null)
@@ -180,6 +196,9 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
             if(user!=null)
             {
                 Toast.makeText(getApplicationContext(), "Profile update", Toast.LENGTH_SHORT).show();
+
+                GlobalSection.userProfile = user;
+
                 etName.setText(user.name.toString());
                 etEmail.setText(user.email.toString());
                 etPassword.setText(user.password.toString());
