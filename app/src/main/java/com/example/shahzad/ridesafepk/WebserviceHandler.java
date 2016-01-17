@@ -136,6 +136,55 @@ public class WebserviceHandler {
 
 
 
+    public RideModel FinishRide(Context context, RideModel rideModel ) throws UnsupportedEncodingException {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "FinishRide/" + rideModel.id  +"/"+  rideModel.amount +"/"+  URLEncoder.encode(String.valueOf(rideModel.review), "UTF-8") +"/"+ rideModel.rating;
+        Log.d("ChangeRideStatus",url);
+        String jsonResult = GetJsonFromUrl(url);
+        if (jsonResult != null) {
+            JSONObject ride;
+            try {
+                ride = new JSONObject(jsonResult);
+                Integer id          = ride.getInt("id");
+                Integer passengerID = ride.getInt("passengerID");
+                Integer driverID = ride.getInt("driverID");
+                String from_address = ride.getString("from_destination");
+                String to_address   = ride.getString("to_destination");
+                double from_lat     = ride.getDouble("from_lat");
+                double from_lng     = ride.getDouble("from_lng");
+                double to_lat       = ride.getDouble("to_lat");
+                double to_lng = ride.getDouble("to_lng");
+                Integer status      = ride.getInt("status");
+                String review = ride.getString("review");
+                //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
+                //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
+
+                float amount, rating;
+
+                if(ride.getString("amount").equals("") || ride.isNull("amount")) {
+                    amount =  0;
+                }
+                else{
+                    amount = Float.valueOf(ride.getString("amount"));
+                }
+
+                if(ride.getString("rating").equals("") || ride.isNull("rating")) {
+                    rating = 0;
+                }
+                else{
+                    rating = Float.valueOf(ride.getString("rating"));
+                }
+
+                // String date_created = jsonResponse.optString("date_created");
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating);
+                return returnRide;
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public RideModel ChangeRideStatus(Context context, Integer rideId, Integer userId, Integer rstatus ) throws UnsupportedEncodingException {
         String url = context.getResources().getString(R.string.SERVICE_URL)+ "ChangeRideStatus/" + rideId  +"/"+  userId +"/"+ rstatus;
         Log.d("ChangeRideStatus",url);
@@ -154,9 +203,29 @@ public class WebserviceHandler {
                 double to_lat       = ride.getDouble("to_lat");
                 double to_lng = ride.getDouble("to_lng");
                 Integer status      = ride.getInt("status");
+                String review = ride.getString("review");
+                //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
+                //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
+
+                float amount, rating;
+
+                if(ride.getString("amount").equals("") || ride.isNull("amount")) {
+                    amount =  0;
+                }
+                else{
+                    amount = Float.valueOf(ride.getString("amount"));
+                }
+
+                if(ride.getString("rating").equals("") || ride.isNull("rating")) {
+                    rating = 0;
+                }
+                else{
+                    rating = Float.valueOf(ride.getString("rating"));
+                }
+
 
                 // String date_created = jsonResponse.optString("date_created");
-                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status);
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating);
                 return returnRide;
             }
             catch (JSONException e) {
@@ -185,9 +254,28 @@ public class WebserviceHandler {
                 double to_lat       = ride.getDouble("to_lat");
                 double to_lng = ride.getDouble("to_lng");
                 Integer status      = ride.getInt("status");
+                String review = ride.getString("review");
+                //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
+                //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
+
+                float amount, rating;
+
+                if(ride.getString("amount").equals("") || ride.isNull("amount")) {
+                    amount =  0;
+                }
+                else{
+                    amount = Float.valueOf(ride.getString("amount"));
+                }
+
+                if(ride.getString("rating").equals("") || ride.isNull("rating")) {
+                    rating = 0;
+                }
+                else{
+                    rating = Float.valueOf(ride.getString("rating"));
+                }
 
                 // String date_created = jsonResponse.optString("date_created");
-                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status);
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating);
                 return returnRide;
             }
             catch (JSONException e) {
@@ -207,9 +295,27 @@ public class WebserviceHandler {
             ArrayList<RideModel> rides = new ArrayList<RideModel>();
             try {
                 JSONArray ridesArr = new JSONArray(jsonResponse);
+
                 for(int i=0; i < ridesArr.length(); i++) {
                     JSONObject ride = ridesArr.getJSONObject(i);
-                    rides.add(new RideModel(ride.getInt("id"), ride.getInt("passengerID"), ride.getInt("driverID") ,  ride.getString("from_destination"), ride.getString("to_destination"), ride.getDouble("from_lat"), ride.getDouble("from_lng"),  ride.getDouble("to_lat"), ride.getDouble("to_lng"), ride.getInt("status")));
+
+                    float amount, rating;
+
+                    if(ride.getString("amount").equals("") || ride.isNull("amount")) {
+                         amount =  0;
+                    }
+                    else{
+                        amount = Float.valueOf(ride.getString("amount"));
+                    }
+
+                    if(ride.getString("rating").equals("") || ride.isNull("rating")) {
+                         rating = 0;
+                    }
+                    else{
+                        rating = Float.valueOf(ride.getString("rating"));
+                    }
+
+                    rides.add(new RideModel(ride.getInt("id"), ride.getInt("passengerID"), ride.getInt("driverID") ,  ride.getString("from_destination"), ride.getString("to_destination"), ride.getDouble("from_lat"), ride.getDouble("from_lng"),  ride.getDouble("to_lat"), ride.getDouble("to_lng"), ride.getInt("status"), amount, ride.getString("review"), rating));
                 }
                 return rides;
             } catch (JSONException e) {
@@ -240,9 +346,29 @@ public class WebserviceHandler {
                 double to_lat       = ride.getDouble("to_lat");
                 double to_lng = ride.getDouble("to_lng");
                 Integer status      = ride.getInt("status");
+                String review = ride.getString("review");
+
+                //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
+                //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
+
+                float amount, rating;
+
+                if(ride.getString("amount").equals("") || ride.isNull("amount")) {
+                    amount =  0;
+                }
+                else{
+                    amount = Float.valueOf(ride.getString("amount"));
+                }
+
+                if(ride.getString("rating").equals("") || ride.isNull("rating")) {
+                    rating = 0;
+                }
+                else{
+                    rating = Float.valueOf(ride.getString("rating"));
+                }
 
                // String date_created = jsonResponse.optString("date_created");
-                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status);
+                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng,status, amount , review, rating);
                 return returnRide;
             }
             catch (JSONException e) {

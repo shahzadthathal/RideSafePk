@@ -1,6 +1,9 @@
 package com.example.shahzad.ridesafepk;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -8,13 +11,17 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,6 +51,12 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
 
     Button btnAccept, btnFinish, btnReject;
 
+    final Context context = this;
+
+    EditText etAmount, etReviews;
+    RatingBar ratingBar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,72 +68,168 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
         btnFinish = (Button) findViewById(R.id.btnFinish);
         btnReject = (Button) findViewById(R.id.btnReject);
 
-        if(User.IsLoggedIn && User.loggedInUserType =="Passenger")
+
+        if(User.IsLoggedIn)
         {
-            btnAccept.setEnabled(false);
-            btnReject.setEnabled(false);
+            if(User.loggedInUserType.equals("Passenger"))
+            {
+                btnAccept.setEnabled(false);
+            }
         }
 
-        if(GlobalSection.selectedRideDetail !=null) {
+        if(GlobalSection.selectedRideDetail !=null)
+        {
 
-            if(GlobalSection.selectedRideDetail.status == 1 || GlobalSection.selectedRideDetail.status == 2)
+            Log.d("job status",GlobalSection.selectedRideDetail.status+"");
+            // if ride status is pending
+            if(GlobalSection.selectedRideDetail.status == 0)
+            {
+                btnFinish.setEnabled(false);
+            }
+
+            // if ride has been accepted
+            if(GlobalSection.selectedRideDetail.status == 1)
             {
                 btnAccept.setBackgroundColor(Color.GREEN);
                 btnAccept.setEnabled(false);
             }
 
+            //if ride is finished
             if(GlobalSection.selectedRideDetail.status == 2)
             {
+                btnAccept.setBackgroundColor(Color.GREEN);
                 btnFinish.setBackgroundColor(Color.GREEN);
-                btnFinish.setEnabled(false);
-            }
 
-            if(GlobalSection.selectedRideDetail.status == 3 )
-            {
-                btnReject.setBackgroundColor(Color.RED);
+                btnAccept.setEnabled(false);
+                btnFinish.setEnabled(false);
                 btnReject.setEnabled(false);
             }
 
+            // if ride has been rejected
+            if(GlobalSection.selectedRideDetail.status == 3 )
+            {
+                btnReject.setBackgroundColor(Color.RED);
+
+                btnAccept.setEnabled(false);
+                btnFinish.setEnabled(false);
+                btnReject.setEnabled(false);
+            }
 
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
+
         }
         else{
             Toast.makeText(getApplicationContext(), "There is and error, please select ride again", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), RideHistory.class));
         }
+
+
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(getApplicationContext(), "Accept Button Clicked", Toast.LENGTH_LONG).show();
-                //1
-                new ChangeRideStatus().execute();
+                //1 ride accepted
+                new ChangeRideStatus().execute("1");
             }
         });
+
+
+
 
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Finish Button Clicked", Toast.LENGTH_LONG).show();
+
+                LayoutInflater li = LayoutInflater.from(context);//context
+                View promptsView = li.inflate(R.layout.finish_ride_alert_box, null);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                // set finish_ride_alert_box.xml to alertdialog builder
+                alertDialogBuilder.setView(promptsView);
+
+                etAmount = (EditText) promptsView.findViewById(R.id.etAmount);
+                etReviews = (EditText) promptsView.findViewById(R.id.etReviews);
+                ratingBar = ((RatingBar) promptsView.findViewById(R.id.ratingBar));
+
+                // set dialog message
+                alertDialogBuilder
+                        .setTitle("Payment && Reviews")
+                        .setCancelable(false)
+                        .setPositiveButton("Submit",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // get user input and set it to result
+                                        // edit text
+                                        //String   amount = etAmount.getText().toString();
+                                        //String   rating  = ratingBar.getRating()+"";
+                                        //String   reviews = etReviews.getText().toString();
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+                Button sbumitButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                sbumitButton.setOnClickListener(new CustomListenerValidateDialogValue(alertDialog));
+
             }
-            //1
-            //new ChangeRideStatus().execute();
         });
+
+
+
 
         btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Reject Button Clicked", Toast.LENGTH_LONG).show();
-                //3
-                //new ChangeRideStatus().execute();
+                //3 ride rejected
+                new ChangeRideStatus().execute("3");
             }
         });
 
+
+
     }
 
-    public class ChangeRideStatus extends AsyncTask<Void, Void, RideModel> {
+    public class CustomListenerValidateDialogValue implements View.OnClickListener {
+        private final Dialog dialog;
+        public CustomListenerValidateDialogValue(Dialog dialog) {
+            this.dialog = dialog;
+        }
+        @Override
+        public void onClick(View v) {
+            // put your code here
+            String   amount_str = etAmount.getText().toString();
+            String   rating_str  = ratingBar.getRating()+"";
+            String   reviews = etReviews.getText().toString();
 
+            if (amount_str.equals("") || amount_str.equals("0") || rating_str.equals("0.0") || reviews.equals("")) {
+                Toast.makeText(RideDetail.this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
+            }else{
+                int rid = GlobalSection.selectedRideDetail.id;
+                Float amount = Float.parseFloat(amount_str);
+                Float rating = Float.parseFloat(rating_str);
+                RideModel rideModel = new RideModel(rid, amount, rating , reviews);
+                new FinishRide(rideModel).execute();
+                dialog.dismiss();
+            }
+
+        }
+    }
+
+    public class FinishRide extends AsyncTask<Void, Void, RideModel> {
+
+        RideModel _rideModel;
+
+        public FinishRide(RideModel rideModel)
+        {
+            _rideModel = rideModel;
+        }
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(RideDetail.this);
@@ -132,11 +241,58 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
 
         protected RideModel doInBackground(Void... params) {
 
+            try {
+                WebserviceHandler service = new WebserviceHandler(getApplicationContext());
+                _rideModel = service.FinishRide(getApplicationContext(), _rideModel);
+                GlobalSection.selectedRideDetail = _rideModel;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return _rideModel;
+        }
+
+        @Override
+        protected void onPostExecute(RideModel rideModel) {
+            pDialog.dismiss();
+            super.onPostExecute(rideModel);
+            if (rideModel != null) {
+                Log.i("ride status 1", GlobalSection.selectedRideDetail.status + "");
+                Log.i("ride status 1", rideModel.status + "");
+                GlobalSection.selectedRideDetail = rideModel;
+
+                if (rideModel.status == 2) {
+                    btnAccept.setBackgroundColor(Color.GREEN);
+                    btnAccept.setEnabled(false);
+                    btnFinish.setBackgroundColor(Color.GREEN);
+                    btnFinish.setEnabled(false);
+                    btnReject.setEnabled(false);
+                }
+                Toast.makeText(getApplicationContext(), "Job status has been changed", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+    public class ChangeRideStatus extends AsyncTask<String, Void, RideModel> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(RideDetail.this);
+            pDialog.setMessage("Updating ride status...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        protected RideModel doInBackground(String... params) {
+
             RideModel rideModel = null;
 
             try {
+                int rideStatus = Integer.parseInt(params[0]);
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
-                rideModel = service.ChangeRideStatus(getApplicationContext(), GlobalSection.selectedRideDetail.id, GlobalSection.selectedRideDetail.driverID, 1);
+                rideModel = service.ChangeRideStatus(getApplicationContext(), GlobalSection.selectedRideDetail.id, GlobalSection.selectedRideDetail.driverID, rideStatus);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -157,6 +313,16 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
                     btnAccept.setBackgroundColor(Color.GREEN);
                     btnAccept.setEnabled(false);
                 }
+
+                if (rideModel.status == 3) {
+                    btnReject.setBackgroundColor(Color.RED);
+                    btnAccept.setEnabled(false);
+
+                    btnAccept.setEnabled(false);
+                    btnFinish.setEnabled(false);
+                }
+
+
                 Toast.makeText(getApplicationContext(), "Job status has been changed", Toast.LENGTH_LONG).show();
             }
         }
@@ -186,8 +352,7 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
                 startActivity(new Intent(getApplicationContext(), RideHistory.class));
                 break;
             case R.id.action_logout:
-                User.IsLoggedIn = false;
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                startActivity(new Intent(getApplicationContext(), Logout.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

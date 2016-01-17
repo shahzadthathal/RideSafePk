@@ -113,8 +113,7 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
                 startActivity(new Intent(getApplicationContext(), RideHistory.class));
                 break;
             case R.id.action_logout:
-                User.IsLoggedIn = false;
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                startActivity(new Intent(getApplicationContext(), Logout.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

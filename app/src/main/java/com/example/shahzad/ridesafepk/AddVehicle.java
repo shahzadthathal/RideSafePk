@@ -123,7 +123,4 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-
-
-
 }

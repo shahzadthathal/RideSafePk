@@ -15,9 +15,21 @@ public class RideModel {
 
    // Date reserve_date_start, reserve_date_end, created_date;
 
-    double amount;
-
     int status;
+
+    float amount, rating;
+
+    String review;
+
+
+
+    public  RideModel(Integer id, float amount, float rating, String review)
+    {
+        this.id = id;
+        this.amount = amount;
+        this.rating = rating;
+        this.review = review;
+    }
 
     //save first time job without acceptene of any driver
 
@@ -35,7 +47,7 @@ public class RideModel {
 
     //save ride detail after recored added into db
 
-    public  RideModel(Integer id, Integer passengerID, Integer driverID, String from_destination, String to_destination, double from_lat, double from_lng, double to_lat, double to_lng, int status)
+    public  RideModel(Integer id, Integer passengerID, Integer driverID, String from_destination, String to_destination, double from_lat, double from_lng, double to_lat, double to_lng, int status, float amount, String review, float rating)
     {
         this.id = id;
         this.passengerID = passengerID;
@@ -47,6 +59,9 @@ public class RideModel {
         this.to_lat = to_lat;
         this.to_lng = to_lng;
         this.status = status;
+        this.amount = amount;
+        this.review = review;
+        this.rating = rating;
     }
 
 

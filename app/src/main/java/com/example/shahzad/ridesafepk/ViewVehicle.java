@@ -108,9 +108,7 @@ public class ViewVehicle extends AppCompatActivity implements View.OnClickListen
                 startActivity(new Intent(getApplicationContext(), RideHistory.class));
                 break;
             case R.id.action_logout:
-                User.IsLoggedIn = false;
-                user = null;
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                startActivity(new Intent(getApplicationContext(), Logout.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -1,6 +1,7 @@
 package com.example.shahzad.ridesafepk;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,23 @@ public class Logout extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        User.IsLoggedIn = false;
+        User.loggedInUserType = "";
+
+        GlobalSection.selectedRideDetail = null;
+        GlobalSection.rideDetailBeforeSave = null;
+        GlobalSection.driverDetail = null;
+        GlobalSection.driversList = null;
+        GlobalSection.FromText = "";
+        GlobalSection.ToText = "";
+        GlobalSection.SelectedDriverID = 0;
+        GlobalSection.rideDetailAfterSave = null;
+        GlobalSection.FromLat = 0;
+        GlobalSection.FromLong = 0;
+        GlobalSection.ToLat = 0;
+        GlobalSection.ToLong = 0;
+
+        startActivity(new Intent(getApplicationContext(), Login.class));
     }
 
 

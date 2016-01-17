@@ -128,16 +128,18 @@ public class MyService extends Service {
 
             if(rideModel != null) {
 
+                GlobalSection.selectedRideDetail = rideModel;
+
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(MyService.this)
                                 // .setSmallIcon(R.drawable.ic_launcher)
                                 .setSmallIcon(R.drawable.cast_ic_notification_1)
-                                .setContentTitle("New Request Found")
-                                .setContentText("you have a new ride request from " + rideModel.from_destination +
+                                .setContentTitle("New Ride Request Found")
+                                .setContentText("You have a new ride request from " + rideModel.from_destination +
                                         " and PassengerID: " + rideModel.passengerID);
-                Intent resultIntent = new Intent(MyService.this, RideDetailNotify.class);
+                Intent resultIntent = new Intent(MyService.this, RideDetail.class);
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(MyService.this);
-                stackBuilder.addParentStack(RideDetailNotify.class);
+                stackBuilder.addParentStack(RideDetail.class);
                 stackBuilder.addNextIntent(resultIntent);
                 PendingIntent resultPendingIntent =
                         stackBuilder.getPendingIntent(

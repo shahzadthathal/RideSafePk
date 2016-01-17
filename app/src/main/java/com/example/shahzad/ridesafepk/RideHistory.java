@@ -43,7 +43,7 @@ public class RideHistory extends AppCompatActivity {
         if(GlobalSection.rideHistoryList !=null && GlobalSection.rideHistoryList.size() > 0){
 
             for (RideModel r : GlobalSection.rideHistoryList) {
-                rideList.add(new RideModel(r.id, r.passengerID, r.driverID, r.from_destination, r.to_destination, r.from_lat, r.from_lng, r.to_lat, r.to_lng, r.status));
+                rideList.add(new RideModel(r.id, r.passengerID, r.driverID, r.from_destination, r.to_destination, r.from_lat, r.from_lng, r.to_lat, r.to_lng, r.status, r.amount, r.review, r.rating));
             }
 
             listView = (ListView)findViewById(R.id.listView);
@@ -75,7 +75,12 @@ public class RideHistory extends AppCompatActivity {
                     double to_lat = myAdapter.getItem(position).to_lat;
                     double to_lng = myAdapter.getItem(position).to_lng;
                     Integer status = myAdapter.getItem(position).status;
-                    RideModel rideModel = new RideModel(rid, pid, did, from_destination, to_destination, from_lat, from_lng, to_lat, to_lng, status);
+
+                    float amount = myAdapter.getItem(position).amount;
+                    String review = myAdapter.getItem(position).review;
+                    float rating = myAdapter.getItem(position).rating;
+
+                    RideModel rideModel = new RideModel(rid, pid, did, from_destination, to_destination, from_lat, from_lng, to_lat, to_lng, status, amount, review, rating);
                     GlobalSection.selectedRideDetail = rideModel;
                     startActivity(new Intent(getApplicationContext(), RideDetail.class));
                 }
@@ -108,11 +113,10 @@ public class RideHistory extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), BookRide.class));
                 break;
             case R.id.action_view_rides:
-                //startActivity(new Intent(getApplicationContext(), RideHistory.class));
+                startActivity(new Intent(getApplicationContext(), RideHistory.class));
                 break;
             case R.id.action_logout:
-                User.IsLoggedIn = false;
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                startActivity(new Intent(getApplicationContext(), Logout.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
