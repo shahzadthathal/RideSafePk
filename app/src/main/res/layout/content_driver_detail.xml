@@ -13,41 +13,73 @@
     tools:showIn="@layout/activity_driver_detail">
 
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:id="@+id/imageView" />
 
-    <TextView
-        android:layout_width="wrap_content"
+
+
+    <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Driver Akram"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+        <com.pkmmte.view.CircularImageView
+            android:id="@+id/icon"
+            android:layout_width="109dp"
+            android:layout_height="67dp"
+            android:src="@drawable/pic3"
+            app:border="true"
+            app:border_color="#2c3e50"
+            app:border_width="2dp"
+            app:shadow="true"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
         android:id="@+id/tvName"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Contact"
-        android:id="@+id/tvPhone"
-        android:layout_below="@+id/tvName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="5dp"
+            android:textSize="18sp"
+        android:focusable="false"
+        android:textColor="#0c0b0b" />
+
+
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="2km Away"
         android:id="@+id/tvDistance"
-        android:layout_below="@+id/tvPhone"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4.33Km away"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="14sp"
+        android:textIsSelectable="false"
+        android:singleLine="true"
+        android:focusable="false"
+        android:textColor="#3f3636"
+        android:layout_marginBottom="2dp" />
+
+    <TextView
+        android:id="@+id/tvPhone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="03016973691"
+        android:focusable="false"
+        android:textColor="#3f3636"
+        android:layout_marginBottom="2dp" />
+
+    <RatingBar
+        android:layout_width="82dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/rbRating"
+        android:numStars="5"
+        style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+        android:layout_marginBottom="5dp"
+        android:focusable="false"
+        />
+
+
+
 
     <Button
         android:id="@+id/btnContactDriver"
@@ -60,11 +92,11 @@
         android:text="Hire Me"
         android:textColor="#ffffff"
         android:textSize="18sp"
-        android:layout_below="@+id/tvDistance"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    </LinearLayout>
 
 
 </RelativeLayout>

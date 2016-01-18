@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +25,13 @@ import java.io.IOException;
 public class DriverDetail extends AppCompatActivity implements  View.OnClickListener{
 
     Button btnContactDriver;
-    TextView tvName, tvPhone, tvDistance;
-    ImageView mImageView;
+
+
+    TextView name;
+    TextView distance;
+    TextView phone;
+    RatingBar rating;
+    ImageView image;
 
     Chronometer chronometer;
     ProgressDialog pDialog;
@@ -37,10 +43,12 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        tvName = (TextView) findViewById(R.id.tvName);
-        tvPhone = (TextView) findViewById(R.id.tvPhone);
-        tvDistance = (TextView) findViewById(R.id.tvDistance);
-        mImageView = (ImageView) findViewById(R.id.imageView);
+        image=(ImageView) findViewById(R.id.icon);
+        name = (TextView) findViewById(R.id.tvName);
+        distance = (TextView) findViewById(R.id.tvDistance);
+        phone = (TextView) findViewById(R.id.tvPhone);
+        rating = ((RatingBar) findViewById(R.id.rbRating));
+
 
         btnContactDriver = (Button) findViewById(R.id.btnContactDriver);
         btnContactDriver.setOnClickListener(this);
@@ -53,10 +61,12 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
             finish();
         }
         else{
-            tvName.setText("Name: "+GlobalSection.driverDetail.name);
-            tvPhone.setText("Phone: "+GlobalSection.driverDetail.phone);
-            tvDistance.setText(GlobalSection.driverDetail.distance.toString()+"km away");
-            mImageView.setImageResource(R.drawable.pic1);
+
+            name.setText("Name: "+GlobalSection.driverDetail.name);
+            distance.setText(GlobalSection.driverDetail.distance.toString()+"km away");
+            phone.setText("Phone: "+GlobalSection.driverDetail.phone);
+            rating.setRating(Float.parseFloat(GlobalSection.driverDetail.rating.toString()));
+            image.setImageResource(R.drawable.pic1);
         }
 
     }
@@ -87,6 +97,14 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
         }
     }
 
+    @Override
+    protected void onStart() {
+
+        if(!User.IsLoggedIn )
+            startActivity(new Intent(this,Login.class));
+        super.onStart();
+    }
+
 
 
     @Override
@@ -104,7 +122,7 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
         switch(item.getItemId())
         {
             case R.id.action_profile:
-                startActivity(new Intent(getApplication(), UpdateProfile.class));
+                startActivity(new Intent(getApplicationContext(), UpdateProfile.class));
                 break;
             case R.id.action_add_ride:
                 startActivity(new Intent(getApplicationContext(),BookRide.class));

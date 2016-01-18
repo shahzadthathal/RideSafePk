@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId())
         {
             case R.id.action_profile:
-                startActivity(new Intent(getApplication(), UpdateProfile.class));
+                startActivity(new Intent(getApplicationContext(), UpdateProfile.class));
                 break;
             case R.id.action_add_ride:
                 startActivity(new Intent(getApplicationContext(), BookRide.class));

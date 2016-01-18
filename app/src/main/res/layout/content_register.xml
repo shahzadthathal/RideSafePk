@@ -95,11 +95,11 @@ tools:showIn="@layout/activity_register">
                     android:id="@+id/etNic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="NIC Number"
-                    android:inputType="number"
+                    android:hint="NIC Number xxxxx-xxxxxxx-x"
+                    android:inputType="text"
                     android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
-
+            <!--android:inputType="number"-->
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

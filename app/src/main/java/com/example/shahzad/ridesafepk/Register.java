@@ -80,8 +80,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                     Toast.makeText(getApplicationContext(), "Please enter phone", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else if(nic.equals("")) {
+                else if(!User.isValidPhoneNumber(phone))
+                {
+                    Toast.makeText(getApplicationContext(), "Please enter valid phone number, > 6 and less than 13", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(nic.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please enter NIC Number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(!User.isValidNicNumber(nic))
+                {
+                    Toast.makeText(getApplicationContext(), "Valid NIC number required, xxxxx-xxxxxxx-x", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else if (userType.equals("")) {
@@ -89,6 +99,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                     return;
                 }
                 else {
+                    Toast.makeText(getApplicationContext(), "Valid NIC number", Toast.LENGTH_SHORT).show();
                     user = new User(name, email, password, phone, nic, userType);
                     new RegisterUser(user).execute();
                 }

@@ -1,6 +1,8 @@
 package com.example.shahzad.ridesafepk;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by shahzad on 12/12/2015.
@@ -108,5 +110,45 @@ public class User {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
+
+
+    public final static boolean isValidPhoneNumber(CharSequence target) {
+        if (target == null) {
+            return false;
+        } else {
+            if (target.length() < 6 || target.length() > 13) {
+                return false;
+            } else {
+                return android.util.Patterns.PHONE.matcher(target).matches();
+            }
+        }
+    }
+
+    public final  static boolean isValidNicNumber(CharSequence target)
+    {
+        //32303-7101329-7
+       // String regexStr = "^[\\ddddd-\\ddddddd-\\d]$";
+        //String regexStr = "^[\\d{5}[-]?\\d{7}[-]?\\d{1}]$";
+        String regexStr = "^(\\d{5}-)(\\d{7}-)(\\d{1})$";
+        Pattern pattern = Pattern.compile(regexStr);
+        Matcher matcher = pattern.matcher(target);
+
+        if(target == null){
+            return false;
+        }
+        else  if (target.length() < 13 || target.length() > 15) {
+            return  false;
+        }
+       /* else if(!matcher.matches())
+        {
+            return  false;
+        }
+        */
+        else{
+            return  true;
+        }
+    }
+
+
 }
 

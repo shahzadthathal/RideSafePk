@@ -92,6 +92,16 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(getApplicationContext(), "Please enter phone", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                else if(!User.isValidPhoneNumber(phone))
+                {
+                    Toast.makeText(getApplicationContext(), "Please enter valid phone number, > 6 and less than 13", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(!User.isValidNicNumber(nic))
+                {
+                    Toast.makeText(getApplicationContext(), "Valid NIC number required, xxxxx-xxxxxxx-x", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 else if(nic.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please enter NIC Number", Toast.LENGTH_SHORT).show();
                     return;
@@ -125,7 +135,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
         switch(item.getItemId())
         {
             case R.id.action_profile:
-                startActivity(new Intent(getApplication(), UpdateProfile.class));
+                startActivity(new Intent(getApplicationContext(), UpdateProfile.class));
                 break;
             case R.id.action_add_ride:
                 startActivity(new Intent(getApplicationContext(), BookRide.class));
@@ -211,5 +221,13 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
 
         }
+    }
+
+    @Override
+    protected void onStart() {
+
+        if(!User.IsLoggedIn )
+            startActivity(new Intent(this,Login.class));
+        super.onStart();
     }
 }

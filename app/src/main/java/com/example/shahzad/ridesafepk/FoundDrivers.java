@@ -2,6 +2,7 @@ package com.example.shahzad.ridesafepk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,33 +25,9 @@ import java.util.ArrayList;
 
 public class FoundDrivers extends AppCompatActivity {
 
-    /*ListView list;
-    String[] drivername ={
-            "Driver 1",
-            "Driver 2",
-            "Driver 2",
-            "Driver 3",
-            "Driver 4",
-            "Driver 5",
-            "Driver 6",
-            "Driver 7"
-    };
-
-    Integer[] imgid={
-            R.drawable.pic1,
-            R.drawable.pic2,
-            R.drawable.pic3,
-            R.drawable.pic4,
-            R.drawable.pic5,
-            R.drawable.pic6,
-            R.drawable.pic7,
-            R.drawable.pic8,
-    };
-    */
-
-    ArrayList<DriverModel> driverList = new ArrayList<DriverModel>();
     ListView listView;
-    ArrayAdapter<DriverModel> myAdapter;
+    DriverAdapter driverAdapter;
+    ArrayList<DriverModel> driverData = new ArrayList<DriverModel>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +37,86 @@ public class FoundDrivers extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if(GlobalSection.driversList != null && GlobalSection.driversList.size() > 0){
+
+        /*
+        setListData();
+        Resources res =getResources();
+        listView = (ListView) findViewById(R.id.lvItems);
+        driverAdapter =  new DriverAdapter(getApplicationContext(), driverData, res);
+        listView.setAdapter(driverAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+
+                Toast.makeText(getApplicationContext(), "item clicked", Toast.LENGTH_SHORT).show();
+                ;
+
+                DriverModel driverModel = driverData.get(position);
+                GlobalSection.SelectedDriverID = driverModel.id;
+                GlobalSection.driverDetail = driverModel;
+
+                Log.d("Driver id", driverModel.id + "");
+
+                startActivity(new Intent(getApplicationContext(), DriverDetail.class));
+
+            }
+        });
+
+        */
+
+
+        if(GlobalSection.driversList != null && GlobalSection.driversList.size() > 0)
+        {
+
+            for (DriverModel d : GlobalSection.driversList)
+            {
+                driverData.add(new DriverModel(d.id, d.name, d.phone, d.distance, d.rating, d.image));
+            }
+
+            Resources res =getResources();
+            listView = (ListView) findViewById(R.id.lvItems);
+            driverAdapter =  new DriverAdapter(getApplicationContext(), driverData, res);
+           /* driverAdapter =  new DriverAdapter(getApplicationContext(),
+                    driverData, res) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    //TextView text = (TextView) view.findViewById(android.R.id.text1);
+                    //text.setTextColor(Color.WHITE);
+                    return view;
+                }
+            };*/
+
+
+            listView.setAdapter(driverAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        // TODO Auto-generated method stub
+
+                        Toast.makeText(getApplicationContext(),"item clicked",Toast.LENGTH_SHORT).show();;
+
+                        DriverModel driverModel = driverData.get(position);
+                        GlobalSection.SelectedDriverID = driverModel.id;
+                        GlobalSection.driverDetail = driverModel;
+
+                        Log.d("Driver id",driverModel.id+"");
+
+                        startActivity(new Intent(getApplicationContext(), DriverDetail.class));
+
+                    }
+                });
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "No driver found at this time",Toast.LENGTH_LONG).show();
+        }
+
+
+        /*
+
+        if(GlobalSection.driversList != null && GlobalSection.driversList.size() > 0)
+        {
 
             for (DriverModel d : GlobalSection.driversList)
             {
@@ -70,6 +126,8 @@ public class FoundDrivers extends AppCompatActivity {
 
             listView = (ListView)findViewById(R.id.listView);
 
+
+            // old code
             //myAdapter = new ArrayAdapter<DriverModel>(this, android.R.layout.simple_expandable_list_item_1, driverList);
 
             myAdapter =  new ArrayAdapter<DriverModel>(getApplicationContext(),
@@ -108,26 +166,25 @@ public class FoundDrivers extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No driver found at this time",Toast.LENGTH_LONG).show();
         }
 
-
-
-
-       /* CustomListAdapter adapter=new CustomListAdapter(this, drivername, imgid);
-        list=(ListView)findViewById(R.id.listView);
-        list.setAdapter(adapter);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                String Slecteditem = itemname[+position];
-                Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-            }
-        });
         */
 
     }
 
+    public void setListData()
+    {
+        for(Integer i=1; i<=14; i++)
+        {
+            String image = "";
+            if(i>8) {
+                 image = "pic" + (i-8);
+            }
+            else {
+                 image = "pic" + i;
+            }
+            driverData.add(new DriverModel(i, "Driver "+i, "333333", 4.2,3.3, image));
+
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,7 +201,7 @@ public class FoundDrivers extends AppCompatActivity {
         switch(item.getItemId())
         {
             case R.id.action_profile:
-                startActivity(new Intent(getApplication(), UpdateProfile.class));
+                startActivity(new Intent(getApplicationContext(), UpdateProfile.class));
                 break;
             case R.id.action_add_ride:
                 startActivity(new Intent(getApplicationContext(), BookRide.class));
@@ -168,6 +225,14 @@ public class FoundDrivers extends AppCompatActivity {
             }
         }
         return super.onPrepareOptionsMenu(menu);
+    }
+
+   @Override
+    protected void onStart() {
+
+        if(!User.IsLoggedIn )
+            startActivity(new Intent(this,Login.class));
+        super.onStart();
     }
 
 }

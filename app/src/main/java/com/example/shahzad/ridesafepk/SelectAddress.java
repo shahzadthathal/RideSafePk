@@ -408,4 +408,11 @@ public class SelectAddress extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
+    @Override
+    protected void onStart() {
+
+        if(!User.IsLoggedIn )
+            startActivity(new Intent(this,Login.class));
+        super.onStart();
+    }
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:weightSum="1">
+
+    <com.pkmmte.view.CircularImageView
+        android:id="@+id/icon"
+        android:layout_width="63dp"
+        android:layout_height="67dp"
+        android:src="@drawable/pic3"
+        app:border="true"
+        app:border_color="#2c3e50"
+        app:border_width="2dp"
+        app:shadow="true"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:padding="2dp"
+                android:layout_gravity="left"
+                android:textSize="18sp"
+                android:focusable="false"
+                android:textColor="#0c0b0b" />
+
+            <TextView
+            android:id="@+id/tvDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.33Km away"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                android:textSize="14sp"
+                android:textIsSelectable="false"
+                android:singleLine="true"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:textColor="#3f3636" />
+
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="03016973691"
+            android:layout_marginLeft="10dp"
+            android:focusable="false"
+            android:textColor="#3f3636" />
+
+        <RatingBar
+            android:layout_width="82dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbRating"
+            android:numStars="5"
+            style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:focusable="false"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

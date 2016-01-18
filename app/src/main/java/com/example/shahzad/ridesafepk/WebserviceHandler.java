@@ -410,7 +410,12 @@ public class WebserviceHandler {
                 JSONArray driverArr = new JSONArray(jsonResponse);
                 for(int i=0; i < driverArr.length(); i++) {
                     JSONObject driver = driverArr.getJSONObject(i);
-                    drivers.add(new DriverModel(driver.getInt("id"),driver.getString("name"),driver.getString("phone"),Double.parseDouble(driver.getString("distance"))));
+                    drivers.add(new DriverModel(driver.getInt("id"), driver.getString("name"),
+                            driver.getString("phone"),
+                            Double.parseDouble(driver.getString("distance")),
+                            Double.parseDouble(driver.getString("rating")),
+                            driver.getString("image")
+                    ));
                 }
                 return drivers;
             } catch (JSONException e) {
