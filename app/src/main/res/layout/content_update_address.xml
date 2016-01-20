@@ -4,8 +4,8 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
-tools:context="com.example.shahzad.ridesafepk.SelectAddress"
-tools:showIn="@layout/activity_select_address">
+tools:context="com.example.shahzad.ridesafepk.UpdateAddress"
+tools:showIn="@layout/activity_update_address">
 
 <RelativeLayout
     android:layout_width="fill_parent"
@@ -17,10 +17,7 @@ tools:showIn="@layout/activity_select_address">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/str_btn_find"
-        android:layout_alignParentRight="true"
-        android:background="#2c3e50"
-        android:textColor="#ffffff"
-        android:textSize="16sp"/>
+        android:layout_alignParentRight="true" />
 
     <EditText
         android:id="@+id/et_location"
@@ -31,16 +28,6 @@ tools:showIn="@layout/activity_select_address">
         android:layout_toLeftOf="@id/btn_find" />
 
 </RelativeLayout>
-
-    <!--
-    <fragment
-        android:id="@+id/place_autocomplete_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        />
-
-    -->
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/map"

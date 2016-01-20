@@ -2,6 +2,7 @@ package com.example.shahzad.ridesafepk;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,9 +27,15 @@ import java.util.ArrayList;
 public class RideHistory extends AppCompatActivity {
 
 
-    ArrayList<RideModel> rideList = new ArrayList<RideModel>();
+   // ArrayList<RideModel> rideList = new ArrayList<RideModel>();
+    //ListView listView;
+    //ArrayAdapter<RideModel> myAdapter;
+
     ListView listView;
-    ArrayAdapter<RideModel> myAdapter;
+    RideAdapter rideAdapter;
+    ArrayList<RideModel> rideData = new ArrayList<RideModel>();
+
+
 
     ProgressDialog pDialog;
 
@@ -40,12 +47,74 @@ public class RideHistory extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //new GetAllRide().execute();
 
+        if(GlobalSection.rideHistoryList !=null && GlobalSection.rideHistoryList.size() > 0) {
+
+            for (RideModel r : GlobalSection.rideHistoryList) {
+                rideData.add(new RideModel(r.id, r.passengerID, r.driverID, r.from_destination, r.to_destination, r.from_lat, r.from_lng, r.to_lat, r.to_lng, r.status, r.amount, r.review, r.rating, r.driver_name, r.passenger_name));
+            }
+
+            Resources res =getResources();
+            listView = (ListView) findViewById(R.id.lvItems);
+            //rideAdapter =  new RideAdapter(getApplicationContext(), rideData, res);
+
+            rideAdapter =  new RideAdapter(getApplicationContext(), rideData, res) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+
+                    RideModel rideModel = rideData.get(position);
+                    TextView txt;
+
+                    if(rideModel.status ==0)
+                    {
+                        txt = (TextView) view.findViewById(R.id.tvJobStatus);
+                        txt.setTextColor(Color.YELLOW);
+                    }
+                    else if(rideModel.status ==1)
+                    {
+                        txt = (TextView) view.findViewById(R.id.tvJobStatus);
+                        txt.setTextColor(Color.BLUE);
+                    }
+                    else if(rideModel.status ==2)
+                    {
+                       txt = (TextView) view.findViewById(R.id.tvJobStatus);
+                       txt.setTextColor(Color.DKGRAY);
+                    }
+                    else if(rideModel.status ==3)
+                    {
+                        txt = (TextView) view.findViewById(R.id.tvJobStatus);
+                        txt.setTextColor(Color.RED);
+                    }
+
+                    return view;
+                }
+            };
+
+
+            listView.setAdapter(rideAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // TODO Auto-generated method stub
+
+                    RideModel rideModel = rideData.get(position);
+                    GlobalSection.selectedRideDetail = rideModel;
+                    startActivity(new Intent(getApplicationContext(), RideDetail.class));
+
+                }
+            });
+        }
+        else{
+            //Toast.makeText(getApplicationContext(), "No rides found",Toast.LENGTH_LONG).show();
+            new GetAllRide().execute();
+        }
+
+        /*
         if(GlobalSection.rideHistoryList !=null && GlobalSection.rideHistoryList.size() > 0){
 
             for (RideModel r : GlobalSection.rideHistoryList) {
-                rideList.add(new RideModel(r.id, r.passengerID, r.driverID, r.from_destination, r.to_destination, r.from_lat, r.from_lng, r.to_lat, r.to_lng, r.status, r.amount, r.review, r.rating, r.driver_name, r.passenger_name));
+                rideData.add(new RideModel(r.id, r.passengerID, r.driverID, r.from_destination, r.to_destination, r.from_lat, r.from_lng, r.to_lat, r.to_lng, r.status, r.amount, r.review, r.rating, r.driver_name, r.passenger_name));
             }
 
             listView = (ListView)findViewById(R.id.listView);
@@ -94,6 +163,10 @@ public class RideHistory extends AppCompatActivity {
         else{
             new GetAllRide().execute();
         }
+        */
+
+
+
     }
 
     @Override
@@ -160,6 +233,7 @@ public class RideHistory extends AppCompatActivity {
                 GlobalSection.rideHistoryList = service.GetAllRides(getApplicationContext(),User.loggedInUserId, User.loggedInUserType);
                 if(GlobalSection.rideHistoryList!=null) {
                     Log.e("Total Rides", GlobalSection.rideHistoryList.size() + "");
+
                 }
             }catch (IOException e) {
                 e.printStackTrace();
@@ -170,7 +244,20 @@ public class RideHistory extends AppCompatActivity {
             pDialog.dismiss();
             super.onPostExecute(rideModel);
             if(GlobalSection.rideHistoryList !=null) {
-                startActivity(new Intent(getApplicationContext(), RideHistory.class));
+                if(GlobalSection.rideHistoryList.size() == 0)
+                {
+                    Toast.makeText(getApplicationContext(), "No rides found...", Toast.LENGTH_LONG).show();
+
+                    if(User.loggedInUserType == "Passenger") {
+                        startActivity(new Intent(getApplicationContext(), BookRide.class));
+                    }
+                    else{
+                        finish();
+                    }
+                }
+                else {
+                    startActivity(new Intent(getApplicationContext(), RideHistory.class));
+                }
             }
             else{
                 Toast.makeText(getApplicationContext(), "No rides found...", Toast.LENGTH_LONG).show();

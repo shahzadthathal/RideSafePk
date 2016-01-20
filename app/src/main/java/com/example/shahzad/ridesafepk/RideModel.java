@@ -69,9 +69,11 @@ public class RideModel {
     }
 
 
-    @Override
+
+    /*@Override
     public String toString() {
         return  "From:"+ this.from_destination + ", To: " + this.to_destination + ", Driver:"+this.driver_name +", Passenger:"+this.passenger_name;
     }
+    */
 
 }

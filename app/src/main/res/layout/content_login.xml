@@ -38,7 +38,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Email"
                         android:inputType="textEmailAddress"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:text="p@app.com" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -51,7 +52,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Password"
                         android:inputType="textPassword"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:text="123" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -88,8 +90,9 @@
                 android:layout_marginTop="20dp"
                 android:text="Don&apos;t have access?"
                 android:textColor="#2c3e50"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textIsSelectable="false" />
 
 
         </LinearLayout>

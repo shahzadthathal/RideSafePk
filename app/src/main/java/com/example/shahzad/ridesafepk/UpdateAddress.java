@@ -1,9 +1,5 @@
 package com.example.shahzad.ridesafepk;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
@@ -13,10 +9,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,12 +24,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
-
-public class AddAddress extends AppCompatActivity implements OnMapReadyCallback {
+public class UpdateAddress extends AppCompatActivity implements OnMapReadyCallback {
 
     GoogleMap myMap;
     MarkerOptions markerOptions;
@@ -44,14 +40,14 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
 
     EditText etLocation;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_address);
+        setContentView(R.layout.activity_update_address);
 
-        SupportMapFragment supportMapFragment = (SupportMapFragment)
-                getSupportFragmentManager().findFragmentById(R.id.map);
 
+        SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -62,38 +58,23 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
                 if(user !=null) {
                     new SaveUserAddress(user).execute();
                 }
-
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
         etLocation = (EditText) findViewById(R.id.et_location);
-
-
-        // Getting a reference to the map
-        //myMap = supportMapFragment.getMap();
-
-
-        // Getting reference to btn_find of the layout activity_main
         Button btn_find = (Button) findViewById(R.id.btn_find);
 
-        // Defining button click event listener for the find button
-        OnClickListener findClickListener = new OnClickListener() {
+        OnClickListener findClickListener = new OnClickListener(){
+
             @Override
             public void onClick(View v) {
-                // Getting reference to EditText to get the user input location
 
-
-                // Getting user input location
                 String location = etLocation.getText().toString();
-
                 if(location!=null && !location.equals("")){
                     new GeocoderTask().execute(location);
                 }
             }
         };
-
-        // Setting button click event listener for the find button
         btn_find.setOnClickListener(findClickListener);
 
     }
@@ -156,6 +137,7 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
         */
 
     }
+
 
     public  class GetAddressTask extends AsyncTask<Location, Void, String> {
 
@@ -313,25 +295,25 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
         }
     }
 
-    public void saveAddress(Address address){
+   /* public void saveAddress(Address address){
 
-      if(User.IsLoggedIn)
-      {
-          int id = User.loggedInUserId;
-          String street =  address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
-          String city = address.getLocality();
-          String country = address.getCountryName();
-          Double  lat =  address.getLatitude();
-          Double  lng = address.getLongitude();
-          user = new User(id, street, city, country, lat, lng);
-         // new SaveUserAddress(user).execute();
-      }
-
-  }
+        if(User.IsLoggedIn)
+        {
+            int id = User.loggedInUserId;
+            String street =  address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
+            String city = address.getLocality();
+            String country = address.getCountryName();
+            Double  lat =  address.getLatitude();
+            Double  lng = address.getLongitude();
+            user = new User(id, street, city, country, lat, lng);
+            // new SaveUserAddress(user).execute();
+        }
+    }
+    */
 
     private  class SaveUserAddress extends AsyncTask<Void, Void, User>{
 
-       User saveAdress;
+        User saveAdress;
 
         public SaveUserAddress(User u)
         {
@@ -341,7 +323,7 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(AddAddress.this);
+            pDialog = new ProgressDialog(UpdateAddress.this);
             pDialog.setMessage("Saving Address...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);

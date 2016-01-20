@@ -115,6 +115,18 @@ tools:showIn="@layout/activity_update_profile">
             android:textColor="#ffffff"
             android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/btnUpdateAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#2c3e50"
+            android:text="Update Address"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
 
     </LinearLayout>
 </ScrollView>

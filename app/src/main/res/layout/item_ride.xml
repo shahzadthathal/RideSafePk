@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:weightSum="1">
+
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/border_custom_added">
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="left"
+                android:textSize="18sp"
+                android:focusable="false"
+                android:textColor="#0c0b0b"
+                android:layout_weight="0.65" />
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+
+            <TextView
+            android:id="@+id/tvJobStatus"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:text="Pending"
+            android:layout_marginLeft="10dp"
+            android:focusable="false"
+            android:textColor="#3f3636"
+                android:layout_weight="0.11" />
+
+            <TextView
+                android:id="@+id/tvAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="450Pkr"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:textColor="#3f3636"
+                android:layout_weight="0.26" />
+
+            <RatingBar
+            android:layout_width="82dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbRating"
+            android:numStars="5"
+            style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:focusable="false"
+            />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/tvFromDestination"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="From: Street 102, Islamabad, Pakistan"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="left"
+                    android:textSize="18sp"
+                    android:focusable="false"
+                    android:textColor="#3f3636"
+                    android:layout_weight="0.65"
+                    android:singleLine="false" />
+
+
+
+            </LinearLayout>
+
+
+        <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/tvToDestination"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="To: 6th Road Rawalpindi Paksitan"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="left"
+                        android:textSize="18sp"
+                        android:focusable="false"
+                        android:textColor="#3f3636"
+                        android:layout_weight="0.65"
+                        android:layout_marginLeft="10dp" />
+
+
+
+                </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

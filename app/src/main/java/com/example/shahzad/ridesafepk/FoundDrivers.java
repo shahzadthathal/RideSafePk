@@ -95,13 +95,13 @@ public class FoundDrivers extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         // TODO Auto-generated method stub
 
-                        Toast.makeText(getApplicationContext(),"item clicked",Toast.LENGTH_SHORT).show();;
+                       // Toast.makeText(getApplicationContext(),"item clicked",Toast.LENGTH_SHORT).show();;
 
                         DriverModel driverModel = driverData.get(position);
                         GlobalSection.SelectedDriverID = driverModel.id;
                         GlobalSection.driverDetail = driverModel;
 
-                        Log.d("Driver id",driverModel.id+"");
+                       // Log.d("Driver id",driverModel.id+"");
 
                         startActivity(new Intent(getApplicationContext(), DriverDetail.class));
 

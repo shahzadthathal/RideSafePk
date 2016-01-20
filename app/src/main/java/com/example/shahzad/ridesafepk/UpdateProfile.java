@@ -24,6 +24,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
     EditText etName, etEmail, etPassword, etPhone, etNic, etUserType;
     Button btnUpdateProfile;
+    Button btnUpdateAddress;
     ProgressDialog pDialog;
     User user;
 
@@ -63,6 +64,9 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
         btnUpdateProfile = (Button) findViewById(R.id.btnUpdateProfile);
         btnUpdateProfile.setOnClickListener(this);
+
+        btnUpdateAddress = (Button) findViewById(R.id.btnUpdateAddress);
+        btnUpdateAddress.setOnClickListener(this);
 
     }
 
@@ -116,6 +120,10 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
             /*case R.id.btnLogin:
                 startActivity(new Intent(this, Login.class));
                 break;*/
+
+            case R.id.btnUpdateAddress:
+                startActivity(new Intent(this, UpdateAddress.class));
+                break;
         }
     }
 
@@ -206,7 +214,6 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
             if(user!=null)
             {
                 Toast.makeText(getApplicationContext(), "Profile update", Toast.LENGTH_SHORT).show();
-
                 GlobalSection.userProfile = user;
 
                 etName.setText(user.name.toString());
@@ -218,8 +225,6 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
             else{
                 Toast.makeText(getApplicationContext(), "Profile not updated", Toast.LENGTH_SHORT).show();
             }
-
-
         }
     }
 
