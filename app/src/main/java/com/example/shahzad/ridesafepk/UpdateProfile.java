@@ -2,6 +2,8 @@ package com.example.shahzad.ridesafepk;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -27,6 +30,8 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
     Button btnUpdateAddress;
     ProgressDialog pDialog;
     User user;
+
+    ImageView imageToUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,9 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
         etPassword = (EditText) findViewById(R.id.etPassword);
         etPhone = (EditText) findViewById(R.id.etPhone);
         etNic = (EditText) findViewById(R.id.etNic);
+
+        imageToUpload  = (ImageView) findViewById(R.id.imageToUpload);
+
 
         if(GlobalSection.userProfile !=null)
         {
@@ -80,6 +88,20 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
                 String phone    = etPhone.getText().toString();
                 String nic      = etNic.getText().toString();
 
+                String image = "55akasdfadphpoijpiojasdfasdfasdfasdfasdfasdfasdfasdf";
+
+                if( imageToUpload.getDrawable() != null){
+
+                       Bitmap bitmapImage = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
+                       if(bitmapImage !=null)
+                       {
+                           image = User.getEncoded64ImageStringFromBitmap(bitmapImage);
+                       }
+                       else{
+                           image = "55akasdfadphpoijpiojasdfasdfasdfasdfasdfasdfasdfasdf";
+                       }
+                }
+
                 if (name.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please enter your name", Toast.LENGTH_SHORT).show();
                     return;
@@ -101,18 +123,18 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(getApplicationContext(), "Please enter valid phone number, > 6 and less than 13", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else if(!User.isValidNicNumber(nic))
+               /* else if(!User.isValidNicNumber(nic))
                 {
                     Toast.makeText(getApplicationContext(), "Valid NIC number required, xxxxx-xxxxxxx-x", Toast.LENGTH_SHORT).show();
                     return;
-                }
+                }*/
                 else if(nic.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please enter NIC Number", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else
                 {
-                    user = new User(User.loggedInUserId, name, email, password, phone, nic);
+                    user = new User(User.loggedInUserId, name, email, password, phone, nic, image);
                     new UserUpdateProfile(user).execute();
                 }
                 break;
@@ -196,7 +218,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
                 User result = service.UpdateProfile(getApplicationContext(), _user);
                 if(result!=null)
                 {
-                    _user = new User(result.id, result.name, result.email, result.password, result.phone, result.nic, result.userType, result.street, result.city, result.country,result.lat, result.lng, result.is_login, result.is_vehicle_added, result.reg_id,result.isError, result.errorMessage);
+                    _user = new User(result.id, result.name, result.email, result.password, result.phone, result.nic, result.userType, result.street, result.city, result.country,result.lat, result.lng, result.is_login, result.is_vehicle_added, result.reg_id,result.isError, result.errorMessage, result.image);
                 }
             }catch (IOException e) {
                 e.printStackTrace();
@@ -230,7 +252,6 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onStart() {
-
         if(!User.IsLoggedIn )
             startActivity(new Intent(this,Login.class));
         super.onStart();

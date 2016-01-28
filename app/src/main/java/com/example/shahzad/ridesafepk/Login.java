@@ -42,8 +42,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
 
-        btnRegister = (Button) findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(this);
+        //btnRegister = (Button) findViewById(R.id.btnRegister);
+        //btnRegister.setOnClickListener(this);
 
         tvForgetPassword.setOnClickListener(this);
 
@@ -54,8 +54,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onStart() {
         super.onStart();
-        if(User.IsLoggedIn ==true)
-            startActivity(new Intent(this, MainActivity.class));
+        if(User.IsLoggedIn == true)
+            startActivity(new Intent(this, UpdateProfile.class));
     }
 
 
@@ -121,7 +121,7 @@ public void onClick(View v) {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
                 User result = service.Login(getApplicationContext(), user);
                 if(result!=null) {
-                        returnUser = new User(result.id, result.name, result.email, result.password, result.phone, result.nic, result.userType, result.street, result.city, result.country, result.lat, result.lng, result.is_login, result.is_vehicle_added, result.reg_id, result.isError, result.errorMessage);
+                        returnUser = new User(result.id, result.name, result.email, result.password, result.phone, result.nic, result.userType, result.street, result.city, result.country, result.lat, result.lng, result.is_login, result.is_vehicle_added, result.reg_id, result.isError, result.errorMessage, result.image);
                 }
             }catch (IOException e) {
                 e.printStackTrace();

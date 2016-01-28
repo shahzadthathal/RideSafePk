@@ -91,6 +91,7 @@ public class Logout extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
             else{
+                User.IsLoggedIn = false;
                // Toast.makeText(getApplicationContext(),"Unable to loged out, please try latter...", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }

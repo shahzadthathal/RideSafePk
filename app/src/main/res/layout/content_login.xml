@@ -70,7 +70,7 @@
                 android:textColor="#ffffff"
                 android:textSize="18sp" />
 
-            <Button
+            <!--<Button
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,9 +78,9 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
                 android:background="#2c3e50"
-                android:text="Register Here"
+                android:text="Sign Up"
                 android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:textSize="18sp" />-->
 
             <TextView
                 android:id="@+id/tvForgetPassword"

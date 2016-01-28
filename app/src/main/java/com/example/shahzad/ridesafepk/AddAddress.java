@@ -356,7 +356,7 @@ public class AddAddress extends AppCompatActivity implements OnMapReadyCallback 
                 User result = service.saveAddress(getApplicationContext(), saveAdress);
                 if(result!=null){
                     Log.d("Result","Address  added");
-                    returnUser = new User(result.id, result.name, result.email, result.password, result.phone, result.nic, result.userType, result.street, result.city, result.country,result.lat, result.lng, result.is_login, result.is_vehicle_added,  result.reg_id, result.isError, result.errorMessage);
+                    returnUser = new User(result.id, result.name, result.email, result.password, result.phone, result.nic, result.userType, result.street, result.city, result.country,result.lat, result.lng, result.is_login, result.is_vehicle_added,  result.reg_id, result.isError, result.errorMessage, result.image);
                     User.IsLoggedIn=true;
                     User.loggedInUserId = result.id;
 

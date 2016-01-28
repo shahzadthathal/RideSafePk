@@ -9,22 +9,34 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 
 /**
@@ -97,6 +109,7 @@ public class WebserviceHandler {
 
     }*/
 
+
     private String GetJsonFromUrl(String requestedUrl)
     {
         // added by Sir Shahid, to avoid some http request stoped by java
@@ -134,56 +147,249 @@ public class WebserviceHandler {
         return data;
     }
 
+    public String postData(String urlpath, String json)
+    {
+        Log.d("posting data",json.toString());
+        Log.d("postingContentLength", Integer.toString(json.toString().getBytes().length)+"");
 
 
-    public RideModel FinishRide(Context context, RideModel rideModel ) throws UnsupportedEncodingException {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "FinishRide/" + rideModel.id  +"/"+  rideModel.amount +"/"+  URLEncoder.encode(String.valueOf(rideModel.review), "UTF-8") +"/"+ rideModel.rating;
-        Log.d("ChangeRideStatus",url);
-        String jsonResult = GetJsonFromUrl(url);
-        if (jsonResult != null) {
-            JSONObject ride;
-            try {
-                ride = new JSONObject(jsonResult);
-                Integer id          = ride.getInt("id");
-                Integer passengerID = ride.getInt("passengerID");
-                Integer driverID = ride.getInt("driverID");
-                String from_address = ride.getString("from_destination");
-                String to_address   = ride.getString("to_destination");
-                double from_lat     = ride.getDouble("from_lat");
-                double from_lng     = ride.getDouble("from_lng");
-                double to_lat       = ride.getDouble("to_lat");
-                double to_lng = ride.getDouble("to_lng");
-                Integer status      = ride.getInt("status");
-                String review = ride.getString("review");
-                //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
-                //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
+        String data = "";
+        HttpURLConnection connection = null;
 
-                float amount, rating;
+        try {
+            URL url=new URL(urlpath);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+           // connection.setRequestProperty("Content-Length", "" + Integer.toString(json.toString().getBytes().length));
+            OutputStreamWriter streamWriter = new OutputStreamWriter(connection.getOutputStream());
 
-                if(ride.getString("amount").equals("") || ride.isNull("amount")) {
-                    amount =  0;
+            streamWriter.write(json.toString());
+            streamWriter.flush();
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(streamReader);
+                while ((data = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(data);
                 }
-                else{
-                    amount = Float.valueOf(ride.getString("amount"));
-                }
+                bufferedReader.close();
 
-                if(ride.getString("rating").equals("") || ride.isNull("rating")) {
-                    rating = 0;
-                }
-                else{
-                    rating = Float.valueOf(ride.getString("rating"));
-                }
-
-                String driver_name = ride.getString("driver_name");
-                String passenger_name = ride.getString("passenger_name");
-
-                // String date_created = jsonResponse.optString("date_created");
-                RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat,to_lng, status, amount , review, rating, driver_name, passenger_name);
-                return returnRide;
+                Log.d("HTTP_OK response", stringBuilder.toString());
+                return stringBuilder.toString();
+            } else {
+                Log.e("HTTP_ERROR response", connection.getResponseMessage());
+                return null;
             }
-            catch (JSONException e) {
+        } catch (Exception exception){
+            Log.e("test", exception.toString());
+            return null;
+        } finally {
+            if (connection != null){
+                connection.disconnect();
+            }
+        }
+    }
+
+    public User RegisterPost(Context context, User rUser) throws UnsupportedEncodingException{
+
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "Signup";
+        try
+        {
+            JSONObject newUser =  new JSONObject();
+            newUser.put("name", rUser.name);
+            newUser.put("email", rUser.email);
+            newUser.put("password", rUser.password);
+            newUser.put("phone",  rUser.phone);
+            newUser.put("nic", rUser.nic);
+            newUser.put("userType", rUser.userType);
+            newUser.put("image", rUser.image);
+
+            String response = postData(url, newUser.toString());
+            Log.d("response", response);
+
+            if(response!="")
+            {
+                try {
+                    JSONObject user = new JSONObject(response);
+                    User returnUser = new User( user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"), user.getString("image"));
+                    return returnUser;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return  null;
+    }
+
+
+
+    /*public User Register(Context context,User rUser) throws UnsupportedEncodingException
+    {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "Register/" + URLEncoder.encode(String.valueOf(rUser.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.email), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.password), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.phone), "UTF-8") +"/" + URLEncoder.encode(String.valueOf(rUser.nic), "UTF-8") + "/" + rUser.userType;//+ "/" + URLEncoder.encode(String.valueOf(rUser.image), "UTF-8")
+        String jsonResult = GetJsonFromUrl(url);
+        Log.d("Register Response",jsonResult);
+        if(jsonResult!="")
+        {
+            try {
+                JSONObject user = new JSONObject(jsonResult);
+                User returnUser = new User( user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"), user.getString("image"));
+                return returnUser;
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+        return null;
+    }*/
+
+
+    public User UpdateProfile(Context context,User rUser) throws UnsupportedEncodingException
+    {
+       // String url = context.getResources().getString(R.string.SERVICE_URL)+ "UpdateProfile/"+ rUser.id +"/"+ URLEncoder.encode(String.valueOf(rUser.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.email), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.password), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.phone), "UTF-8") +"/" + URLEncoder.encode(String.valueOf(rUser.nic), "UTF-8");
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "UpdateProfile";
+        try {
+            JSONObject newUser =  new JSONObject();
+            newUser.put("id",rUser.id);
+            newUser.put("name", rUser.name);
+            newUser.put("email", rUser.email);
+            newUser.put("password", rUser.password);
+            newUser.put("phone",  rUser.phone);
+            newUser.put("nic", rUser.nic);
+            newUser.put("userType", rUser.userType);
+            newUser.put("image", rUser.image);
+
+            String response = postData(url, newUser.toString());
+
+            if (response != "")
+            {
+                try {
+                    JSONObject user = new JSONObject(response);
+                    User returnUser = new User(user.getInt("id"), user.getString("name"), user.getString("email"), user.getString("password"), user.getString("phone"), user.getString("nic"), user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")), user.getInt("is_login"), user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"), user.getString("image"));
+                    return returnUser;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /*public User UpdateProfile(Context context,User rUser) throws UnsupportedEncodingException
+    {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "UpdateProfile/"+ rUser.id +"/"+ URLEncoder.encode(String.valueOf(rUser.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.email), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.password), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.phone), "UTF-8") +"/" + URLEncoder.encode(String.valueOf(rUser.nic), "UTF-8");
+        Log.d("Update Profile Url", url);
+        String jsonResult = GetJsonFromUrl(url);
+        Log.d("Update Profile Response",jsonResult);
+        if(jsonResult!="")
+        {
+            try {
+                JSONObject user = new JSONObject(jsonResult);
+                User returnUser = new User( user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"), user.getString("image"));
+                return returnUser;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }*/
+
+
+    public User saveAddress(Context context,User u) throws UnsupportedEncodingException
+    {
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "Saveaddress/" +u.id + "/" + URLEncoder.encode(String.valueOf(u.street), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(u.city), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(u.country), "UTF-8") +"/" + u.lat + "/" + u.lng;
+        Log.d("save address url", url);
+        String jsonResult = GetJsonFromUrl(url);
+        Log.d("Save  address Response",jsonResult);
+        if(jsonResult!="")
+        {
+            try {
+                JSONObject user = new JSONObject(jsonResult);
+                User returnUser = new User(user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")), user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"), user.getString("image"));
+                return returnUser;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public RideModel FinishRide(Context context, RideModel rideModel ) throws UnsupportedEncodingException {
+       // String url = context.getResources().getString(R.string.SERVICE_URL)+ "FinishRide/" + rideModel.id  +"/"+  rideModel.amount +"/"+  URLEncoder.encode(String.valueOf(rideModel.review), "UTF-8") +"/"+ rideModel.rating;
+        String url = context.getResources().getString(R.string.SERVICE_URL)+ "FinishRide";
+
+        Log.d("ChangeRideStatus",url);
+        //String jsonResult = GetJsonFromUrl(url);
+
+        JSONObject postRide = new JSONObject();
+        try {
+            postRide.put("id", rideModel.id);
+            postRide.put("amount", rideModel.amount);
+            postRide.put("review", rideModel.review);
+            postRide.put("rating", rideModel.rating);
+
+            String response = postData(url, postRide.toString());
+
+            //String response = GetJsonFromUrl(url);
+
+            if (response != null) {
+                JSONObject ride;
+                try {
+                    ride = new JSONObject(response);
+                    Integer id = ride.getInt("id");
+                    Integer passengerID = ride.getInt("passengerID");
+                    Integer driverID = ride.getInt("driverID");
+                    String from_address = ride.getString("from_destination");
+                    String to_address = ride.getString("to_destination");
+                    double from_lat = ride.getDouble("from_lat");
+                    double from_lng = ride.getDouble("from_lng");
+                    double to_lat = ride.getDouble("to_lat");
+                    double to_lng = ride.getDouble("to_lng");
+                    Integer status = ride.getInt("status");
+                    String review = ride.getString("review");
+                    //float amount = ride.isNull("amount") ? 0 : Float.valueOf(ride.getString("amount"));
+                    //float rating = ride.isNull("rating") ? 0 : Float.valueOf(ride.getString("rating"));
+
+                    float amount, rating;
+
+                    if (ride.getString("amount").equals("") || ride.isNull("amount")) {
+                        amount = 0;
+                    } else {
+                        amount = Float.valueOf(ride.getString("amount"));
+                    }
+
+                    if (ride.getString("rating").equals("") || ride.isNull("rating")) {
+                        rating = 0;
+                    } else {
+                        rating = Float.valueOf(ride.getString("rating"));
+                    }
+
+                    String driver_name = ride.getString("driver_name");
+                    String passenger_name = ride.getString("passenger_name");
+
+                    // String date_created = jsonResponse.optString("date_created");
+                    RideModel returnRide = new RideModel(id, passengerID, driverID, from_address, to_address, from_lat, from_lng, to_lat, to_lng, status, amount, review, rating, driver_name, passenger_name);
+                    return returnRide;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return null;
     }
@@ -250,7 +456,8 @@ public class WebserviceHandler {
             try {
 
                 ride = new JSONObject(jsonResult);
-                if(!ride.isNull("id"))
+               // if(!ride.isNull("id"))
+                if(ride != null)
                 {
 
                     Integer id = ride.getInt("id");
@@ -447,44 +654,7 @@ public class WebserviceHandler {
         {
             try {
                 JSONObject user = new JSONObject(jsonResult);
-                User returnUser = new User(user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"),Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"), user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
-                return returnUser;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public User Register(Context context,User rUser) throws UnsupportedEncodingException
-    {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "Register/" + URLEncoder.encode(String.valueOf(rUser.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.email), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.password), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.phone), "UTF-8") +"/" + URLEncoder.encode(String.valueOf(rUser.nic), "UTF-8") + "/" + rUser.userType;
-        String jsonResult = GetJsonFromUrl(url);
-        Log.d("Register Response",jsonResult);
-        if(jsonResult!="")
-        {
-            try {
-                JSONObject user = new JSONObject(jsonResult);
-                User returnUser = new User( user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
-                return returnUser;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public User UpdateProfile(Context context,User rUser) throws UnsupportedEncodingException
-    {
-        String url = context.getResources().getString(R.string.SERVICE_URL)+ "UpdateProfile/"+ rUser.id +"/"+ URLEncoder.encode(String.valueOf(rUser.name), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.email), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.password), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(rUser.phone), "UTF-8") +"/" + URLEncoder.encode(String.valueOf(rUser.nic), "UTF-8");
-        Log.d("Update Profile Url",url);
-        String jsonResult = GetJsonFromUrl(url);
-        Log.d("Update Profile Response",jsonResult);
-        if(jsonResult!="")
-        {
-            try {
-                JSONObject user = new JSONObject(jsonResult);
-                User returnUser = new User( user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
+                User returnUser = new User(user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"),Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")),user.getInt("is_login"), user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage") , user.getString("image"));
                 return returnUser;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -494,24 +664,6 @@ public class WebserviceHandler {
     }
 
 
-    public User saveAddress(Context context,User u) throws UnsupportedEncodingException
-    {
-      String url = context.getResources().getString(R.string.SERVICE_URL)+ "Saveaddress/" +u.id + "/" + URLEncoder.encode(String.valueOf(u.street), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(u.city), "UTF-8") + "/" + URLEncoder.encode(String.valueOf(u.country), "UTF-8") +"/" + u.lat + "/" + u.lng;
-        Log.d("save address url", url);
-        String jsonResult = GetJsonFromUrl(url);
-        Log.d("Save  address Response",jsonResult);
-        if(jsonResult!="")
-        {
-            try {
-                JSONObject user = new JSONObject(jsonResult);
-                User returnUser = new User(user.getInt("id"),user.getString("name"),user.getString("email"),user.getString("password"),user.getString("phone"),user.getString("nic"),user.getString("userType"), user.getString("street"), user.getString("city"), user.getString("country"), Double.parseDouble(user.getString("lat")), Double.parseDouble(user.getString("lng")), user.getInt("is_login"),user.getInt("is_vehicle_added"), user.getString("reg_id"), user.getInt("isError"), user.getString("errorMessage"));
-                return returnUser;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
 
     public VehicleModel AddVehicle(Context context, VehicleModel vm)  throws UnsupportedEncodingException
     {

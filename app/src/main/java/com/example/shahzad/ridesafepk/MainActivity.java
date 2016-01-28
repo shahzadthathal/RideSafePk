@@ -1,47 +1,43 @@
 package com.example.shahzad.ridesafepk;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    User user;
+    //User user;
+
+    Button btnPassenger,btnDriver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        /*
-        if(User.IsLoggedIn ) {
-            Log.d("User is ",User.loggedInUserType+"");
-            Intent i = new Intent(this, MyService.class);
-            startService(i);
-        }
-        */
+        btnPassenger = (Button) findViewById(R.id.btnPassenger);
+        btnDriver = (Button) findViewById(R.id.btnDriver);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        btnPassenger.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+
+                startActivity(new Intent(getApplicationContext(), PassengerActivity.class));
             }
         });
+
+        btnDriver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+
+            }
+        });
+
     }
 
 
@@ -52,59 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
     // added by shahzad checkc user is loged in or not
     @Override
-    protected void onStart() {
-
-        if(authenticate() !=true)
-          startActivity(new Intent(this,Login.class));
-        super.onStart();
-    }
-
-
-
-    private boolean authenticate()
+    protected void onStart()
     {
-        return User.IsLoggedIn;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        switch(item.getItemId())
-        {
-            case R.id.action_profile:
-                startActivity(new Intent(getApplicationContext(), UpdateProfile.class));
-                break;
-            case R.id.action_add_ride:
-                startActivity(new Intent(getApplicationContext(), BookRide.class));
-                break;
-            case R.id.action_view_rides:
-                startActivity(new Intent(getApplicationContext(), RideHistory.class));
-                break;
-            case R.id.action_logout:
-                startActivity(new Intent(getApplicationContext(), Logout.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean  onPrepareOptionsMenu(Menu menu) {
-        if (User.IsLoggedIn) {
-            if(User.loggedInUserType.equals("Driver")) {
-                menu.findItem(R.id.action_add_ride).setVisible(false);
-            }
-        }
-        return super.onPrepareOptionsMenu(menu);
+        //if(authenticate() !=true)
+          //startActivity(new Intent(this,Login.class));
+        super.onStart();
     }
 
 }

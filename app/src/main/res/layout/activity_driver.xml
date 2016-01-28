@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.shahzad.ridesafepk.MainActivity">
+    tools:context="com.example.shahzad.ridesafepk.DriverActivity">
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_driver" />
 
 </android.support.design.widget.CoordinatorLayout>

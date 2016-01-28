@@ -125,6 +125,28 @@ tools:showIn="@layout/activity_register">
             </RadioGroup>
 
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/image_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvImage"
+                    android:text="Upload Image"
+                    android:singleLine="true"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="130dp"
+                android:id="@+id/imageToUpload"
+                android:layout_gravity="center_horizontal" />
+
+
         </LinearLayout>
 
 
@@ -136,22 +158,22 @@ tools:showIn="@layout/activity_register">
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:background="#2c3e50"
-            android:text="Register Here"
+            android:text="Sign Up"
             android:textColor="#ffffff"
             android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:background="#2c3e50"
-            android:text="Sign In"
-            android:textColor="#ffffff"
-            android:textSize="18sp" />
+        <!-- <Button
+             android:id="@+id/btnLogin"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="20dp"
+             android:layout_marginRight="20dp"
+             android:layout_marginTop="20dp"
+             android:background="#2c3e50"
+             android:text="Sign In"
+             android:textColor="#ffffff"
+             android:textSize="18sp" />-->
 
-    </LinearLayout>
-</ScrollView>
-</LinearLayout>
+     </LinearLayout>
+ </ScrollView>
+ </LinearLayout>

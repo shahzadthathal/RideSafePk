@@ -9,11 +9,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.shahzad.ridesafepk.MainActivity"
-    tools:showIn="@layout/activity_main"
+    tools:context="com.example.shahzad.ridesafepk.DriverActivity"
+    tools:showIn="@layout/activity_driver"
     android:background="@drawable/backgroundimage"
     android:scaleType = "centerCrop">
-
 
     <LinearLayout
         android:id="@+id/buttonLayout"
@@ -29,23 +28,23 @@
 
 
         <Button
-            android:id="@+id/btnPassenger"
+            android:id="@+id/btnLogin"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/button_boarder"
-            android:text="Passenger"
+            android:text="Sign in"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:layout_weight="1.64" />
 
         <Button
-            android:id="@+id/btnDriver"
+            android:id="@+id/btnRegister"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/button_boarder"
-            android:text="Driver"
+            android:text="Sign up"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:layout_weight="1.64" />

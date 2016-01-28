@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Ride Safe Pk</string>
 
-    <string name="SERVICE_URL">http://192.168.1.12:81/WebService/BIITAlumni.svc/</string>
-    <!--<string name="SERVICE_URL">http://10.0.2.2:81/WebService/BIITAlumni.svc/</string>-->
+    <string name="SERVICE_URL">http://192.168.1.2:81/WebService/BIITAlumni.svc/</string>
+    <!-- <string name="SERVICE_URL">http://10.0.2.2:81/WebService/BIITAlumni.svc/</string>-->
 
 
     <!-- <string name="action_settings">Setting</string> -->
@@ -12,8 +12,8 @@
     <string name="action_logout">Logout</string>
 
     <string name="main_welcome">Welcome</string>
-    <string name="title_activity_login">Login</string>
-    <string name="title_activity_register">Register</string>
+    <string name="title_activity_login">Sign In</string>
+    <string name="title_activity_register">Sing Up</string>
     <string name="title_activity_add_vehicle">Add Vehicle</string>
     <string name="title_activity_view_vehicle">View Vehicle</string>
     <string name="title_activity_book_ride">Book a Ride</string>
@@ -36,9 +36,10 @@
     <string name="title_activity_logout">Logout</string>
     <string name="title_activity_ride_detail_notify">New Ride Notify</string>
     <string name="title_activity_update_profile">Update Profile</string>
-    <string name="title_activity_custom_list_view_android_example">CustomListViewAndroidExample
-    </string>
-    <string name="title_activity_update_address">UpdateAddress</string>
+
+    <string name="title_activity_update_address">Update Address</string>
+    <string name="title_activity_passenger">Passenger Activity</string>
+    <string name="title_activity_driver">Driver Activity</string>
 
 
 </resources>
