@@ -615,12 +615,21 @@ public class WebserviceHandler {
             ArrayList<DriverModel> drivers = new ArrayList<DriverModel>();
             try {
                 JSONArray driverArr = new JSONArray(jsonResponse);
+                double  avg_rating;
                 for(int i=0; i < driverArr.length(); i++) {
                     JSONObject driver = driverArr.getJSONObject(i);
+
+                    if(driver.getString("rating").equals("") || driver.isNull("rating")) {
+                        avg_rating = 0;
+                    }
+                    else{
+                        avg_rating = Double.valueOf(driver.getString("rating"));
+                    }
+
                     drivers.add(new DriverModel(driver.getInt("id"), driver.getString("name"),
                             driver.getString("phone"),
                             Double.parseDouble(driver.getString("distance")),
-                            Double.parseDouble(driver.getString("rating")),
+                            avg_rating,
                             driver.getString("image")
                     ));
                 }

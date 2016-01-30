@@ -167,12 +167,12 @@ public class MyService extends Service {
                 if(User.loggedInUserType.equals("Driver"))
                 {
                     contentTitle = "New Ride Request Found";
-                    contentText = "You have a new ride request from " + rideModel.from_destination + " and PassengerID: " + rideModel.passengerID;
+                    contentText = "You have a new ride request from " + rideModel.from_destination + " and Passenger: " + rideModel.passenger_name;
                 }
                 else if(User.loggedInUserType.equals("Passenger"))
                 {
                     contentTitle = "Ride Request Accepted";
-                    contentText = "Your ride request accepted by" + rideModel.driverID;
+                    contentText = "Your ride request accepted by " + rideModel.driver_name;
                 }
 
                 NotificationCompat.Builder  mBuilder = new NotificationCompat.Builder(MyService.this)
