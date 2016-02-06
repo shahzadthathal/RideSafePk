@@ -77,8 +77,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         etPhone = (EditText) findViewById(R.id.etPhone);
         etNic = (EditText) findViewById(R.id.etNic);
 
-        imageToUpload  = (ImageView) findViewById(R.id.imageToUpload);
+        //imageToUpload  = (ImageView) findViewById(R.id.imageToUpload);
 
+        /*
         tvImage = (TextView) findViewById(R.id.tvImage);
         tvImage.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
@@ -86,6 +87,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 selectImage();
             }
         });
+        */
 
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(this);
@@ -209,7 +211,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 RadioButton driver = (RadioButton) findViewById(R.id.radio_driver);
                 String image = "55akasdfadphpoijpiojasdfasdfasdfasdfasdfasdfasdfasdf";
 
-                if( imageToUpload.getDrawable() != null){
+               /* if( imageToUpload.getDrawable() != null){
 
                    Bitmap bitmapImage = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
                     if(bitmapImage !=null)
@@ -220,6 +222,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                         image = "55akasdfadphpoijpiojasdfasdfasdfasdfasdfasdfasdfasdf";
                     }
                 }
+                */
+
 
 
                 if(passenger.isChecked()){

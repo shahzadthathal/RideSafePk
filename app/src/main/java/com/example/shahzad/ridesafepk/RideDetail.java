@@ -105,6 +105,8 @@ public class RideDetail extends AppCompatActivity implements OnMapReadyCallback 
                 btnReject.setEnabled(false);
             }
 
+            //VehNav
+
             // if ride has been rejected
             if(GlobalSection.selectedRideDetail.status == 3 )
             {

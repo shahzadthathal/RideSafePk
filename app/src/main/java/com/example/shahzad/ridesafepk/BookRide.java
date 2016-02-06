@@ -92,12 +92,17 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
             @Override
             public void onClick(View v) {
 
+                new FindDrivers().execute();
+
+                /*
                 if( GlobalSection.FromLat !=0 && GlobalSection.FromLong != 0) {
+
                     new FindDrivers().execute();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Please select address properly", Toast.LENGTH_SHORT).show();
                 }
+            */
 
             }
         });
@@ -175,7 +180,7 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
             DriverModel driverModel = null;
             try {
                 WebserviceHandler service = new WebserviceHandler(getApplicationContext());
-               // GlobalSection.driversList = service.FindDriversRequest(getApplicationContext(),33.6630613,73.0766153);
+              // GlobalSection.driversList = service.FindDriversRequest(getApplicationContext(),33.6629794,73.0738022);
                GlobalSection.driversList = service.FindDriversRequest(getApplicationContext(),GlobalSection.FromLat,GlobalSection.FromLong);
                 if(GlobalSection.driversList!=null) {
                    Log.e("Total Drivers", GlobalSection.driversList.size() + "");
@@ -188,7 +193,8 @@ public class BookRide extends AppCompatActivity  { //implements OnMapReadyCallba
         protected void onPostExecute(DriverModel driverModel){
             pDialog.dismiss();
             super.onPostExecute(driverModel);
-            startActivity(new Intent(getApplicationContext(), FoundDrivers.class));
+           // startActivity(new Intent(getApplicationContext(), FoundDrivers.class));
+            startActivity(new Intent(getApplicationContext(), FoundTaxis.class));
         }
     }
 

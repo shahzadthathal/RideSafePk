@@ -450,7 +450,8 @@ public class WebserviceHandler {
         String url = context.getResources().getString(R.string.SERVICE_URL)+ "CheckNewRide/" +   userId + "/" +  userType;
         Log.d("Ride detail url",url);
         String jsonResult = GetJsonFromUrl(url);
-        Log.d("Ride Detail service", jsonResult.toString());
+
+        Log.d("Ride Detail service", "Result: "+jsonResult.toString());
         if (jsonResult != null) {
             JSONObject ride;
             try {
@@ -631,6 +632,8 @@ public class WebserviceHandler {
                             Double.parseDouble(driver.getString("distance")),
                             avg_rating,
                             driver.getString("image")
+                            ,Double.parseDouble(driver.getString("lat")), Double.parseDouble(driver.getString("lng")),
+                            driver.getInt("isAvailable")
                     ));
                 }
                 return drivers;

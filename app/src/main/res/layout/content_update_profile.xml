@@ -100,11 +100,11 @@ tools:showIn="@layout/activity_update_profile">
                     android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
 
-            <ImageView
+           <!-- <ImageView
                 android:layout_width="150dp"
                 android:layout_height="130dp"
                 android:id="@+id/imageToUpload"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal" />-->
 
         </LinearLayout>
 

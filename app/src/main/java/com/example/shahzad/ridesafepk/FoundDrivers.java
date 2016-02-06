@@ -71,7 +71,7 @@ public class FoundDrivers extends AppCompatActivity {
 
             for (DriverModel d : GlobalSection.driversList)
             {
-                driverData.add(new DriverModel(d.id, d.name, d.phone, d.distance, d.rating, d.image));
+                driverData.add(new DriverModel(d.id, d.name, d.phone, d.distance, d.rating, d.image, d.lat, d.lng, d.isAvailable));
             }
 
             Resources res =getResources();
@@ -181,7 +181,7 @@ public class FoundDrivers extends AppCompatActivity {
             else {
                  image = "pic" + i;
             }
-            driverData.add(new DriverModel(i, "Driver "+i, "333333", 4.2,3.3, image));
+            driverData.add(new DriverModel(i, "Driver "+i, "333333", 4.2,3.3, image, 37.3333, 79.33333, 1));
 
         }
     }

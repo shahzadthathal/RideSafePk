@@ -51,7 +51,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
         etPhone = (EditText) findViewById(R.id.etPhone);
         etNic = (EditText) findViewById(R.id.etNic);
 
-        imageToUpload  = (ImageView) findViewById(R.id.imageToUpload);
+       // imageToUpload  = (ImageView) findViewById(R.id.imageToUpload);
 
 
         if(GlobalSection.userProfile !=null)

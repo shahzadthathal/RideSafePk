@@ -20,13 +20,20 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.IOException;
 
 public class DriverDetail extends AppCompatActivity implements  View.OnClickListener{
+//implements OnMapReadyCallback, View.OnClickListener{
 
     Button btnContactDriver;
-
-
     TextView name;
     TextView distance;
     TextView phone;
@@ -35,6 +42,11 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
 
     Chronometer chronometer;
     ProgressDialog pDialog;
+
+    private static final LatLng FROM_DESTINATION = new LatLng(GlobalSection.FromLat, GlobalSection.FromLong);
+
+
+    private GoogleMap googleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +81,34 @@ public class DriverDetail extends AppCompatActivity implements  View.OnClickList
             image.setImageResource(R.drawable.pic1);
         }
 
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+       /* SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);*/
+
     }
+
+    /*
+    @Override
+    public void onMapReady(GoogleMap mMap) {
+
+        if(googleMap !=null)
+            googleMap.clear();
+
+        googleMap = mMap;
+
+        // Add a marker in Sydney and move the camera
+        //LatLng sydney = new LatLng(-34, 151);
+        LatLng driverLatLng = new LatLng(33.6629794, 73.0738022);
+        LatLng passengerLatLng = FROM_DESTINATION;
+        googleMap.addMarker(new MarkerOptions().position(driverLatLng).title("Driver")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.taxi));
+        googleMap.addMarker(new MarkerOptions().position(passengerLatLng).title("Passenger")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.from_destination));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(passengerLatLng, 13));
+    }
+
+    */
+
+
 
     public void onClick(View v) {
         switch (v.getId()) {

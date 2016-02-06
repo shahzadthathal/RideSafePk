@@ -32,6 +32,7 @@ public class User {
     public static int loggedInUserId = 0;
     public  static String loggedInUserType;
 
+
     String image;
 
     //constructor for set user data

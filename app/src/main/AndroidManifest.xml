@@ -3,7 +3,10 @@
     package="com.example.shahzad.ridesafepk">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,21 +18,20 @@
     <permission
         android:name="com.example.shahzad.ridesafepk.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
-
-
     <permission
         android:name="com.example.shahzad.ridesafepk.permission.READ_EXTERNAL_STORAGE"
-        android:protectionLevel="signature"/>
-
+        android:protectionLevel="signature" />
     <permission
         android:name="com.example.shahzad.ridesafepk.permission.WRITE_EXTERNAL_STORAGE"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!--<uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+    <!--
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    -->
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -145,7 +147,13 @@
         <activity
             android:name=".DriverActivity"
             android:label="@string/title_activity_driver"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CurrentLocation"
+            android:label="@string/title_activity_current_location" />
+        <activity
+            android:name=".FoundTaxis"
+            android:label="@string/title_activity_found_taxis"></activity>
     </application>
 
 </manifest>
